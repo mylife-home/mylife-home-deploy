@@ -1,0 +1,23 @@
+{
+  "name": "mylife-home-deploy",
+  "version": "1.0.0",
+  "description": "MyLife Home Deployment management",
+  "author": "Vincent Trumpff",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mylife-home/mylife-home-deploy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mylife-home/mylife-home-deploy/issues"
+  },
+  "homepage": "https://github.com/mylife-home/mylife-home-deploy#readme"
+}

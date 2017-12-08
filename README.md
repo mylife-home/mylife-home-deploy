@@ -1,2 +1,2 @@
 # mylife-home-deploy
-MyLife Home Deployment management
+MyLife Home Deployment management (based on alpine)
