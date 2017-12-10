@@ -8,37 +8,57 @@ const vfs        = require('../../lib/engine/vfs');
 //const source = '/Users/vincent/Downloads/alpine-rpi-3.7.0-armhf.tar.gz';
 const source = '/Users/vincent/Downloads/rpi-devel-base.tar.gz';
 
+let cachedBase;
+
+async function extractBase() {
+  if(cachedBase) {
+    return cachedBase;
+  }
+
+  const buffer = await fs.readFile(source);
+  const target = new vfs.Directory();
+  await archive.extract(buffer, target, { baseDirectory: 'mmcblk0p1' });
+  cachedBase = target;
+  return target;
+}
+
+let cachedConfig;
+
+async function extractConfig() {
+  if(cachedConfig) {
+    return cachedConfig;
+  }
+
+  const base = await extractBase();
+
+  const target = new vfs.Directory();
+  await archive.extract(base.get('rpi-devel.apkovl.tar.gz').content, target);
+  cachedConfig = target;
+  return target;
+}
+
 describe('Archive', () => {
 
   it('Should extract base', async () => {
-    const buffer = await fs.readFile(source);
-    const target = new vfs.Directory();
-    await archive.extract(buffer, target, { baseDirectory: 'mmcblk0p1' });
-    const lines = [];
-    formatDirectory(lines, target, 0);
+    const target = await extractBase();
 
-    expect(lines).to.deep.equal(require('./archive-content-base'));
+    expect(formatStructure(target)).to.deep.equal(require('./archive-content-base'));
   });
 
   it('Should extract config', async () => {
-    const buffer = await fs.readFile(source);
-    const root = new vfs.Directory();
-    await archive.extract(buffer, root, { baseDirectory: 'mmcblk0p1' });
+    const target = await extractConfig();
 
-    const target = new vfs.Directory();
-    await archive.extract(root.get('rpi-devel.apkovl.tar.gz').content, target, { createMissingDirectories: true });
-    const lines = [];
-    formatDirectory(lines, target, 0);
-
-    printLines(lines);
-
-    expect(lines).to.deep.equal(require('./archive-content-config'));
+    expect(formatStructure(target)).to.deep.equal(require('./archive-content-config'));
   });
 
   it('Should pack then extract folder', async () => {
+    const source = await extractConfig();
 
+    const buffer = await archive.pack(source);
+    const target = new vfs.Directory();
+    await archive.extract(buffer, target);
 
-
+    expect(formatStructure(target)).to.deep.equal(require('./archive-content-config'));
   });
 });
 
@@ -67,6 +87,12 @@ function printLines(lines) {
 
     console.log(line);
   });
+}
+
+function formatStructure(root) {
+  const lines = [];
+  formatDirectory(lines, root, 0);
+  return lines;
 }
 
 function formatDirectory(lines, vdir, indent) {
