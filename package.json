@@ -20,9 +20,11 @@
   },
   "homepage": "https://github.com/mylife-home/mylife-home-deploy#readme",
   "dependencies": {
-    "chai": "^4.1.2",
     "fs-extra": "^4.0.3",
-    "mocha": "^4.0.1",
     "tar-stream": "^1.5.5"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
   }
 }
