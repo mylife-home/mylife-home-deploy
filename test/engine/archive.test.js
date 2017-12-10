@@ -16,7 +16,7 @@ async function extractBase() {
   }
 
   const buffer = await fs.readFile(source);
-  const target = new vfs.Directory();
+  const target = new vfs.Directory({ missing: true });
   await archive.extract(buffer, target, { baseDirectory: 'mmcblk0p1' });
   cachedBase = target;
   return target;
@@ -31,7 +31,7 @@ async function extractConfig() {
 
   const base = await extractBase();
 
-  const target = new vfs.Directory();
+  const target = new vfs.Directory({ missing: true });
   await archive.extract(base.get('rpi-devel.apkovl.tar.gz').content, target);
   cachedConfig = target;
   return target;
