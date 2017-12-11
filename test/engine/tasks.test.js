@@ -5,7 +5,8 @@ const tasks               = require('../../lib/engine/tasks');
 const vfs                 = require('../../lib/engine/vfs');
 const {
   formatStructure,
-  expectConfigContent
+  expectConfigContent,
+  expectConfigSymlink
 } = require('./utils');
 
 const source = '/Users/vincent/Downloads/rpi-devel-base.tar.gz';
@@ -61,5 +62,19 @@ describe('Tasks', () => {
       expectConfigContent(context, [ 'etc', 'network', 'interfaces' ]);
       expectConfigContent(context, [ 'etc', 'hosts' ]);
     });
-  })
+  });
+
+  describe('ConfigDaemon', () => {
+    it('Should execute properly', async () => {
+      const context  = await initContext();
+      const runlevel = 'default';
+      const name = 'test-daemon';
+
+      await tasks.ConfigDaemon.execute(context, {
+        name, runlevel
+      });
+
+      expectConfigSymlink(context, [ 'etc', 'runlevels', runlevel, name ], `/etc/init.d/${name}`);
+    });
+  });
 });

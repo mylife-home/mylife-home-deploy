@@ -71,6 +71,13 @@ function expectConfigContent(context, path) {
   expect(vfs.readText(context.config, path)).to.equal(contents[path.join('-')]);
 }
 
+function expectConfigSymlink(context, path, target) {
+  const node = vfs.path(context.config, path);
+  expect(node).to.be.an.instanceof(vfs.Symlink);
+  expect(node.target).to.equal(target);
+}
+
 exports.printLines          = printLines;
 exports.formatStructure     = formatStructure;
 exports.expectConfigContent = expectConfigContent;
+exports.expectConfigSymlink = expectConfigSymlink;
