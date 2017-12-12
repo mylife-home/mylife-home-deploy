@@ -12,7 +12,8 @@ async function getIndex() {
     return cachedIndex;
   }
 
-  const index = await apk.index({ repo });
+  const index = new apk.Index();
+  await index.download({ repo });
   cachedIndex = index;
   return index;
 }
@@ -21,8 +22,8 @@ describe('APK', () => {
 
   it('Should get index', async () => {
     const index = await getIndex();
-    expect(index.index.length).to.equal(5648);
-    expect(index.index.find(it => it.name === 'nodejs')).to.deep.equal({
+    expect(index.list().length).to.equal(5648);
+    expect(index.getByName('nodejs')).to.deep.equal({
       raw: 'C:Q1G4khijXgbIREHU26+toG2eIuYhU=\nP:nodejs\nV:8.9.3-r0\nA:armhf\nS:7134025\nI:19423232\nT:JavaScript runtime built on V8 engine - LTS version\nU:https://nodejs.org/\nL:MIT\no:nodejs\nm:Jakub Jirutka <jakub@jirutka.cz>\nt:1512781942\nc:33e07701fafe36a157f32d67a4f84670a31a7a55\nD:ca-certificates nodejs-npm=8.9.3-r0 so:libc.musl-armhf.so.1 so:libcares.so.2 so:libcrypto.so.1.0.0 so:libgcc_s.so.1 so:libhttp_parser.so.2.7.1 so:libssl.so.1.0.0 so:libstdc++.so.6 so:libuv.so.1 so:libz.so.1\np:nodejs-lts=8.9.3 cmd:node\n\n',
       name: 'nodejs',
       version: '8.9.3-r0',
@@ -50,8 +51,10 @@ describe('APK', () => {
   it('Should get package install list', async () => {
     const index = await getIndex();
 
-    const nodeInstallList = apk.installList(index, 'nodejs');
-    const packages = nodeInstallList.map(it => it.name + '-' + it.version);
+    const installList = new apk.InstallList(index);
+    installList.addPackage('nodejs');
+
+    const packages = installList.list().map(it => it.name + '-' + it.version);
     expect(packages).to.deep.equal([
       'nodejs-8.9.3-r0',
       'ca-certificates-20171114-r0',
