@@ -6,15 +6,16 @@ const vfs                 = require('../../lib/engine/vfs');
 const {
   formatStructure,
   expectConfigContent,
-  expectConfigSymlink
+  expectConfigSymlink,
+  printLines
 } = require('./utils');
 
 const source = '/Users/vincent/Downloads/rpi-devel-base.tar.gz';
 
 let cachedRoot;
 
-async function initContext() {
-  if(cachedRoot) {
+async function initContext(options = {}) {
+  if(!options.nocache && cachedRoot) {
     return { root: cachedRoot };
   }
 
@@ -23,7 +24,7 @@ async function initContext() {
     archiveName : source,
     rootPath    : 'mmcblk0p1'
   });
-  cachedRoot = context.root;
+  !options.nocache && (cachedRoot = context.root);
   return context;
 }
 
@@ -39,7 +40,7 @@ describe('Tasks', () => {
 
   describe('ImagePack', () => {
     it('Should execute properly', async () => {
-      const context = await initContext();
+      const context = await initContext({ nocache : true });
       await tasks.ConfigInit.execute(context, {});
       await tasks.ImagePack.execute(context, {});
 
@@ -50,10 +51,11 @@ describe('Tasks', () => {
 
   describe('ImageRemove', () => {
     it('Should execute properly', async () => {
-      const context = await initContext();
+      const context = await initContext({ nocache : true });
       await tasks.ImageRemove.execute(context, { path: '/apks/armhf/APKINDEX.tar.gz' });
 
-      expect(formatStructure(context.root)).to.deep.equal(require('./content/archive-base'));
+      const content = require('./content/archive-base').filter(c => c.name !== 'APKINDEX.tar.gz');
+      expect(formatStructure(context.root)).to.deep.equal(content);
     });
   });
 
