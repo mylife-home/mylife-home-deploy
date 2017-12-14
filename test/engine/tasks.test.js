@@ -106,7 +106,19 @@ describe('Tasks', () => {
     });
   });
 
-  // ConfigPackage
+  describe('ConfigPackage', () => {
+    it('Should execute properly', async () => {
+      const name = 'test-package';
+      const context  = await initContext();
+      await tasks.ConfigInit.execute(context, {});
+
+      await tasks.ConfigPackage.execute(context, {
+        name
+      });
+
+      expectConfigContent(context, [ 'etc', 'apk', 'world' ]);
+    });
+  });
 
   // ConfigCoreComponents
 });
