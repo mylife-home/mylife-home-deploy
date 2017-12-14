@@ -11,37 +11,46 @@ const {
 
 const source = '/Users/vincent/Downloads/rpi-devel-base.tar.gz';
 
-let cachedContext;
+let cachedRoot;
 
 async function initContext() {
-  if(cachedContext) {
-    return cachedContext;
+  if(cachedRoot) {
+    return { root: cachedRoot };
   }
 
   const context = {};
-  await tasks.ImageInit.execute(context, {
-    baseImage : source,
-    rootPath  :'mmcblk0p1'
+  await tasks.ImageImport.execute(context, {
+    archiveName : source,
+    rootPath    : 'mmcblk0p1'
   });
-  cachedContext = context;
+  cachedRoot = context.root;
   return context;
 }
 
 describe('Tasks', () => {
 
-  describe('ImageInit', () => {
+  describe('ImageImport', () => {
     it('Should execute properly', async () => {
       const context = await initContext();
 
-      expect(formatStructure(context.vfs)).to.deep.equal(require('./content/archive-base'));
-      expect(formatStructure(context.config)).to.deep.equal(require('./content/archive-config'));
+      expect(formatStructure(context.root)).to.deep.equal(require('./content/archive-base'));
     });
   });
+
+  describe('ConfigInit', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext();
+      await tasks.ConfigInit.execute(context, {});
+
+      expect(formatStructure(context.root)).to.deep.equal(require('./content/archive-base'));
+      expect(formatStructure(context.config)).to.deep.equal(require('./content/archive-config'));
+    });
+  })
 
   describe('ImagePack', () => {
     it('Should execute properly', async () => {
       const context = await initContext();
-
+      await tasks.ConfigInit.execute(context, {});
       await tasks.ImagePack.execute(context, {});
 
       expect(context.image).to.be.an.instanceof(Buffer);
@@ -51,8 +60,9 @@ describe('Tasks', () => {
 
   describe('ConfigHostname', () => {
     it('Should execute properly', async () => {
-      const context  = await initContext();
       const hostname = 'test-host';
+      const context  = await initContext();
+      await tasks.ConfigInit.execute(context, {});
 
       await tasks.ConfigHostname.execute(context, {
         hostname
@@ -66,9 +76,10 @@ describe('Tasks', () => {
 
   describe('ConfigDaemon', () => {
     it('Should execute properly', async () => {
-      const context  = await initContext();
       const runlevel = 'default';
       const name = 'test-daemon';
+      const context  = await initContext();
+      await tasks.ConfigInit.execute(context, {});
 
       await tasks.ConfigDaemon.execute(context, {
         name, runlevel
