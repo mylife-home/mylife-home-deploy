@@ -37,16 +37,6 @@ describe('Tasks', () => {
     });
   });
 
-  describe('ConfigInit', () => {
-    it('Should execute properly', async () => {
-      const context = await initContext();
-      await tasks.ConfigInit.execute(context, {});
-
-      expect(formatStructure(context.root)).to.deep.equal(require('./content/archive-base'));
-      expect(formatStructure(context.config)).to.deep.equal(require('./content/archive-config'));
-    });
-  })
-
   describe('ImagePack', () => {
     it('Should execute properly', async () => {
       const context = await initContext();
@@ -55,6 +45,29 @@ describe('Tasks', () => {
 
       expect(context.image).to.be.an.instanceof(Buffer);
       expect(context.image.length).to.equal(74553888);
+    });
+  });
+
+  describe('ImageRemove', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext();
+      await tasks.ImageRemove.execute(context, { path: '/apks/armhf/APKINDEX.tar.gz' });
+
+      expect(formatStructure(context.root)).to.deep.equal(require('./content/archive-base'));
+    });
+  });
+
+  // ImageCache
+
+  // ImageInstall
+
+  describe('ConfigInit', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext();
+      await tasks.ConfigInit.execute(context, {});
+
+      expect(formatStructure(context.root)).to.deep.equal(require('./content/archive-base'));
+      expect(formatStructure(context.config)).to.deep.equal(require('./content/archive-config'));
     });
   });
 
@@ -74,6 +87,8 @@ describe('Tasks', () => {
     });
   });
 
+  // ConfigWifi
+
   describe('ConfigDaemon', () => {
     it('Should execute properly', async () => {
       const runlevel = 'default';
@@ -88,4 +103,8 @@ describe('Tasks', () => {
       expectConfigSymlink(context, [ 'etc', 'runlevels', runlevel, name ], `/etc/init.d/${name}`);
     });
   });
+
+  // ConfigPackage
+
+  // ConfigCoreComponents
 });
