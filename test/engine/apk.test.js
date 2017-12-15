@@ -56,8 +56,8 @@ describe('APK', () => {
 
   it('Shoud download multiple repository', async () => {
     const database = new apk.Database();
-    await database.addRepository(repo1);
     await database.addRepository(repo2);
+    await database.addRepository(repo1);
     database.index();
     expect(database.list().length).to.equal(11149);
     expect(database.getByName('nodejs')).to.deep.equal(nodejsPackage);
