@@ -21,6 +21,7 @@
   "homepage": "https://github.com/mylife-home/mylife-home-deploy#readme",
   "dependencies": {
     "fs-extra": "^4.0.3",
+    "sha1": "^1.1.1",
     "tar-stream": "^1.5.5"
   },
   "devDependencies": {

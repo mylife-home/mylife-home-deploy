@@ -59,7 +59,88 @@ describe('Tasks', () => {
     });
   });
 
-  // ImageCache
+  describe('ImageCache', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext({ nocache : true });
+      await tasks.ConfigInit.execute(context, {});
+      await tasks.ConfigPackage.execute(context, { name : 'nodejs' });
+      await tasks.ImageCache.execute(context, {});
+
+      const cache = vfs.path(context.root, [ 'cache' ]);
+      const list = cache.list().map(f => ({ name : f.name, size : f.content.length }));
+
+      console.log(list);
+/*
+[ { name: 'alpine-base',
+    version: '3.7.0-r0',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'alpine-baselayout',
+    version: '3.0.5-r2',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'busybox',
+    version: '1.27.2-r7',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'musl',
+    version: '1.1.18-r2',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'alpine-conf',
+    version: '3.7.0-r0',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'openrc',
+    version: '0.24.1-r4',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'apk-tools',
+    version: '2.8.1-r2',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'libressl2.6-libcrypto',
+    version: '2.6.3-r0',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'libressl2.6-libssl',
+    version: '2.6.3-r0',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'zlib',
+    version: '1.2.11-r1',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'busybox-suid',
+    version: '1.27.2-r7',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'busybox-initscripts',
+    version: '3.1-r2',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'libc-utils', version: '0.7.1-r0', repo: '/apks/armhf/' },
+  { name: 'musl-utils',
+    version: '1.1.18-r2',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'scanelf',
+    version: '1.2.2-r1',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'alpine-keys', version: '2.1-r1', repo: '/apks/armhf/' },
+  { name: 'chrony',
+    version: '3.2-r1',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'libcap', version: '2.25-r1', repo: '/apks/armhf/' },
+  { name: 'openssh',
+    version: '7.5_p1-r7',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'openssh-client',
+    version: '7.5_p1-r7',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'openssh-keygen',
+    version: '7.5_p1-r7',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'openssh-sftp-server',
+    version: '7.5_p1-r7',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'openssh-server',
+    version: '7.5_p1-r7',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' },
+  { name: 'openssh-server-common',
+    version: '7.5_p1-r7',
+    repo: 'http://dl-cdn.alpinelinux.org/alpine/v3.7/main/armhf/' } ]
+*/
+      // TODO: expect
+    });
+  });
 
   // ImageInstall
 
