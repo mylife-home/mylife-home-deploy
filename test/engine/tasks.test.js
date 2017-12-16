@@ -14,12 +14,16 @@ const source = '/Users/vincent/Downloads/rpi-devel-base.tar.gz';
 
 let cachedRoot;
 
+const logger = (category, severity, message) => {
+  console.log(`${severity} : [${category}] ${message}`);
+};
+
 async function initContext(options = {}) {
   if(!options.nocache && cachedRoot) {
-    return { root: cachedRoot };
+    return { logger, root: cachedRoot };
   }
 
-  const context = {};
+  const context = { logger };
   await tasks.ImageImport.execute(context, {
     archiveName : source,
     rootPath    : 'mmcblk0p1'
