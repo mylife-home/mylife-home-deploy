@@ -71,7 +71,7 @@ describe('Tasks', () => {
       await tasks.ImageCache.execute(context, {});
 
       const cache = vfs.path(context.root, [ 'cache' ]);
-      const list = cache.list().map(f => ({ name : f.name, size : f.content.length }));
+      const list  = cache.list().map(f => f.name);
 
       expect(list).to.deep.equal(require('./content/cache'));
     });
