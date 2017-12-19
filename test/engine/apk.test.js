@@ -83,11 +83,11 @@ describe('APK', () => {
       'libressl2.6-libcrypto-2.6.3-r0',
       'nodejs-npm-8.9.3-r0',
       'c-ares-1.13.0-r0',
-      'libcrypto1.0-1.0.2m-r0',
+      'libcrypto1.0-1.0.2n-r0',
       'zlib-1.2.11-r1',
       'libgcc-6.4.0-r5',
       'http-parser-2.7.1-r1',
-      'libssl1.0-1.0.2m-r0',
+      'libssl1.0-1.0.2n-r0',
       'libstdc++-6.4.0-r5',
       'libuv-1.17.0-r0'
     ]);
