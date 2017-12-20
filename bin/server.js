@@ -7,8 +7,9 @@ const dev = process.argv.includes('--dev');
 
 const server = new Server(config, dev);
 
-function terminate() {
-  server.close(() => process.exit());
+async function terminate() {
+  await server.close();
+  process.exit();
 }
 
 process.on('SIGINT', terminate);
