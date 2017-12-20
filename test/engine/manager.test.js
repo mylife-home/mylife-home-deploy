@@ -36,12 +36,16 @@ class ManagerEvents {
   }
 }
 
-async function eventsScope(manager, cb) {
+async function managerScope(cb) {
+  const manager = new Manager();
   const me = new ManagerEvents(manager);
-  await cb();
+  const result = await cb(manager);
   me.close();
-  return me.events;
+  await manager.close();
+  return { result, events : me.events };
 }
+
+// TODO: scope manager ops and construction/close
 
 describe('Manager', () => {
 
@@ -49,41 +53,61 @@ describe('Manager', () => {
   afterEach(dataDirDestroy);
 
   it('Should create and retrieve a simple recipe', async () => {
-    const manager = new Manager('recipe');
-    const events = await eventsScope(manager, async () => {
+    const { result, events } = await managerScope(async manager => {
       manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
+      return manager.getRecipe('recipe');
     });
 
-    expect(manager.getRecipe('recipe')).to.deep.equal([{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
-    expect(events).to.deep.equal([ { name: 'recipe-created', args: [ 'recipe' ] } ]);
+    expect(result).to.deep.equal([{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
+    expect(events).to.deep.equal([
+      { name: 'recipe-created', args: [ 'recipe' ] }
+    ]);
   });
 
   it('Should delete a simple recipe', async () => {
-    const manager = new Manager('recipe');
-    manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
-    manager.deleteRecipe('recipe');
+    const { result, events } = await managerScope(async manager => {
+      manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
+      manager.deleteRecipe('recipe');
+      return manager.listRecipes();
+    });
 
-    expect(manager.listRecipes()).to.deep.equal([]);
+    expect(result).to.deep.equal([]);
+    expect(events).to.deep.equal([
+      { name: 'recipe-created', args: [ 'recipe' ] },
+      { name: 'recipe-deleted', args: [ 'recipe' ] }
+    ]);
   });
 
   it('Should update a simple recipe', async () => {
-    const manager = new Manager('recipe');
-    manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
-    manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+    const { result, events } = await managerScope(async manager => {
+      manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
+      manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+      return manager.getRecipe('recipe');
+    });
 
-    expect(manager.getRecipe('recipe')).to.deep.equal([{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+    expect(result).to.deep.equal([{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+    expect(events).to.deep.equal([
+      { name: 'recipe-created', args: [ 'recipe' ] },
+      { name: 'recipe-updated', args: [ 'recipe' ] }
+    ]);
   });
 
   it('Should list recipes', async () => {
-    const manager = new Manager('recipe');
-    manager.createRecipe('recipe1', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
-    manager.createRecipe('recipe2', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+    const { result, events } = await managerScope(async manager => {
+      manager.createRecipe('recipe1', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
+      manager.createRecipe('recipe2', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+      return manager.listRecipes();
+    });
 
-    expect(manager.listRecipes()).to.deep.equal([ 'recipe1', 'recipe2' ]);
+    expect(result).to.deep.equal([ 'recipe1', 'recipe2' ]);
+    expect(events).to.deep.equal([
+      { name: 'recipe-created', args: [ 'recipe1' ] },
+      { name: 'recipe-created', args: [ 'recipe2' ] }
+    ]);
   });
 
   it('Should execute a simple recipe', async () => {
-    const manager = new Manager('recipe');
+    const manager = new Manager();
     manager.createRecipe('recipe', [
       { type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } },
       { type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }
