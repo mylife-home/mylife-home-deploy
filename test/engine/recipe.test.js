@@ -6,10 +6,7 @@ const fs         = require('fs-extra');
 const Recipe     = require('../../lib/engine/recipe');
 
 const logger = (category, severity, message) => {
-  void category;
-  void severity;
-  void message;
-  //console.log(`${severity} : [${category}] ${message}`); // eslint-disable-line no-console
+  console.log(`${severity} : [${category}] ${message}`); // eslint-disable-line no-console
 };
 
 describe('Recipe', () => {
