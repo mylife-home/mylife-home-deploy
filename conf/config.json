@@ -1,3 +1,6 @@
 {
-  "port": 8005
+  "port": 8005,
+  "data": {
+    "directory": "data/"
+  }
 }
