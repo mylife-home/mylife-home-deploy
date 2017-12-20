@@ -8,7 +8,11 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha -b --recursive --timeout 0 test",
+    "lint": "./node_modules/.bin/eslint lib/* public/app/*",
+    "start-dev": "node bin/server.js --dev",
+    "start": "node bin/server.js",
+    "bundle": "./node_modules/.bin/webpack -d"
   },
   "repository": {
     "type": "git",
@@ -20,12 +24,38 @@
   },
   "homepage": "https://github.com/mylife-home/mylife-home-deploy#readme",
   "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "body-parser": "^1.18.2",
+    "css-loader": "^0.28.7",
+    "eslint": "^4.13.1",
+    "express": "^4.16.2",
+    "file-loader": "^1.1.6",
     "fs-extra": "^4.0.3",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "react-tap-event-plugin": "^3.0.2",
+    "redux": "^3.7.2",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.77.1",
+    "serve-favicon": "^2.4.5",
+    "serve-static": "^1.13.1",
+    "server-destroy": "^1.0.1",
     "sha1": "^1.1.1",
-    "tar-stream": "^1.5.5"
+    "style-loader": "^0.19.1",
+    "tar-stream": "^1.5.5",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.10.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "mocha": "^4.0.1"
+    "eslint-plugin-react": "^7.5.1",
+    "mocha": "^4.0.1",
+    "webpack-dev-middleware": "^2.0.2"
   }
 }
