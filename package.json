@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha -b --recursive --timeout 0 test",
-    "lint": "./node_modules/.bin/eslint lib/* public/app/*",
+    "lint": "./node_modules/.bin/eslint lib/* public/app/* test/*",
     "start-dev": "node bin/server.js --dev",
     "start": "node bin/server.js",
     "bundle": "./node_modules/.bin/webpack -d"
