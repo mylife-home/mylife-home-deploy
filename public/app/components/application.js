@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { Button, Container, Header } from 'semantic-ui-react'
+import { Button, Container, Header } from 'semantic-ui-react';
 
 const Application = () => (
   <Container>
