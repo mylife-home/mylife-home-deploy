@@ -27,7 +27,7 @@ function printLines(lines) {
     }
     line += ' },';
 
-    console.log(line);
+    console.log(line); // eslint-disable-line no-console
   });
 }
 

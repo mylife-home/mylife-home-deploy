@@ -7,7 +7,7 @@ const {
   formatStructure,
   expectConfigContent,
   expectConfigSymlink,
-  printLines
+  //printLines
 } = require('./utils');
 
 const source = '/Users/vincent/Downloads/rpi-devel-base.tar.gz';
@@ -15,7 +15,7 @@ const source = '/Users/vincent/Downloads/rpi-devel-base.tar.gz';
 let cachedRoot;
 
 const logger = (category, severity, message) => {
-  console.log(`${severity} : [${category}] ${message}`);
+  console.log(`${severity} : [${category}] ${message}`); // eslint-disable-line no-console
 };
 
 async function initContext(options = {}) {
