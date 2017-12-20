@@ -19,6 +19,10 @@ const logger = (category, severity, message) => {
 };
 
 async function initContext(options = {}) {
+  if(options.noload) {
+    return { logger };
+  }
+
   if(!options.nocache && cachedRoot) {
     return { logger, root: cachedRoot };
   }
@@ -79,6 +83,21 @@ describe('Tasks', () => {
 
   // ImageInstall
 
+  describe('ImageReset', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext({ nocache : true });
+      await tasks.ConfigInit.execute(context, {});
+      await tasks.ImagePack.execute(context, {});
+      await tasks.VariablesSet.execute(context, { name: 'variable', value: 'value' });
+      await tasks.ImageReset.execute(context, {});
+
+      expect(context.variables).to.deep.equal({ variable : 'value' });
+      expect(context.root).to.be.null;
+      expect(context.config).to.be.null;
+      expect(context.image).to.be.null;
+    });
+  });
+
   describe('ConfigInit', () => {
     it('Should execute properly', async () => {
       const context = await initContext();
@@ -137,4 +156,29 @@ describe('Tasks', () => {
   });
 
   // ConfigCoreComponents
+
+  describe('VariablesSet', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext({ noload: true });
+      await tasks.VariablesSet.execute(context, { name: 'variable', value: 'value' });
+
+      expect(context.variables).to.deep.equal({ variable : 'value' });
+    });
+  });
+
+  describe('VariablesReset', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext();
+      await tasks.ConfigInit.execute(context, {});
+      await tasks.ImagePack.execute(context, {});
+      await tasks.VariablesSet.execute(context, { name: 'variable', value: 'value' });
+      await tasks.VariablesReset.execute(context, {});
+
+
+      expect(context.variables).to.be.null;
+      expect(context.root).to.exist;
+      expect(context.config).to.exist;
+      expect(context.image).to.exist;
+    });
+  });
 });
