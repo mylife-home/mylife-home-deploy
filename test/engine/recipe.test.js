@@ -1,9 +1,10 @@
 'use strict';
 
-const { expect } = require('chai');
-const path       = require('path');
-const fs         = require('fs-extra');
-const Recipe     = require('../../lib/engine/recipe');
+const { expect }  = require('chai');
+const path        = require('path');
+const fs          = require('fs-extra');
+const directories = require('../../lib/directories');
+const Recipe      = require('../../lib/engine/recipe');
 
 const logger = (category, severity, message) => {
   console.log(`${severity} : [${category}] ${message}`); // eslint-disable-line no-console
@@ -65,8 +66,8 @@ describe('Recipe', () => {
 const dataDir = '/tmp/mylife-home-deploy-test-recipe';
 
 async function dataDirInit() {
-  await fs.ensureDir(dataDir);
-  Recipe.setDataDirectory(dataDir);
+  await fs.ensureDir(path.join(dataDir, 'recipes'));
+  directories.configure(dataDir);
 }
 
 async function dataDirDestroy() {
@@ -74,5 +75,5 @@ async function dataDirDestroy() {
 }
 
 async function dataDirAddJson(name, content) {
-  await fs.writeFile(path.join(dataDir, name + '.json'), JSON.stringify(content));
+  await fs.writeFile(path.join(dataDir, 'recipes', name + '.json'), JSON.stringify(content));
 }
