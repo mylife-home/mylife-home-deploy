@@ -32,5 +32,5 @@ module.exports = [
   'libssl1.0-1.0.2n-r0.57ecdeb2.apk',
   'libstdc++-6.4.0-r5.789bae2e.apk',
   'libuv-1.17.0-r0.27fbd29b.apk',
-  'APKINDEX.70c88391.tar.gz'
+  'APKINDEX.78b10181.tar.gz' //'APKINDEX.70c88391.tar.gz' because we use fake repo
 ];

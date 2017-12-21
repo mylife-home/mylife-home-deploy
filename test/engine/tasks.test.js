@@ -3,6 +3,7 @@
 const path        = require('path');
 const fs          = require('fs-extra');
 const { expect }  = require('chai');
+const express     = require('express');
 const tasks       = require('../../lib/engine/tasks');
 const vfs         = require('../../lib/engine/vfs');
 const directories = require('../../lib/directories');
@@ -73,10 +74,24 @@ describe('Tasks', () => {
   });
 
   describe('ImageCache', () => {
+    let server;
+
+    beforeEach(() => {
+      const app = express();
+      app.use(express.static(path.resolve(__dirname, '../resources/repository')));
+      server = app.listen(4242);
+    });
+
+    afterEach(done => server.close(done));
+
     it('Should execute properly', async () => {
       const context = await initContext({ nocache : true });
       await tasks.ConfigInit.execute(context, {});
       await tasks.ConfigPackage.execute(context, { name : 'nodejs' });
+
+      // use fake repo
+      vfs.writeText(context.config, [ 'etc', 'apk', 'repositories' ], '/media/mmcblk0p1/apks\nhttp://localhost:4242');
+
       await tasks.ImageCache.execute(context, {});
 
       const cache = vfs.path(context.root, [ 'cache' ]);
