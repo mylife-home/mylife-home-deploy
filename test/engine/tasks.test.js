@@ -17,7 +17,7 @@ const {
 let cachedRoot;
 
 const logger = (category, severity, message) => {
-  console.log(`${severity} : [${category}] ${message}`); // eslint-disable-line no-console
+  process.env.VERBOSE === '1' && console.log(`${severity} : [${category}] ${message}`); // eslint-disable-line no-console
 };
 
 async function initContext(options = {}) {

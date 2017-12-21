@@ -7,7 +7,7 @@ const directories = require('../../lib/directories');
 const Recipe      = require('../../lib/engine/recipe');
 
 const logger = (category, severity, message) => {
-  console.log(`${severity} : [${category}] ${message}`); // eslint-disable-line no-console
+  process.env.VERBOSE === '1' && console.log(`${severity} : [${category}] ${message}`); // eslint-disable-line no-console
 };
 
 describe('Recipe', () => {
