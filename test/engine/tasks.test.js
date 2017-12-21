@@ -92,15 +92,18 @@ describe('Tasks', () => {
     it('Should execute properly', async () => {
       const context = await initContext({ noload : true });
       const sourceContent = await fs.readFile(path.resolve(__dirname, '../resources/files/rpi-devel-base.tar.gz'));
+      let destContent;
       context.image = sourceContent;
 
       const tmpDir = '/tmp/mylife-home-deploy-test-task-export';
       directories.configure(tmpDir);
       await fs.ensureDir(directories.files());
-
-      await tasks.ImageExport.execute(context, { archiveName : 'image-export.tar.gz' });
-
-      const destContent = await fs.readFile(path.join(tmpDir, 'files/image-export.tar.gz'));
+      try {
+        await tasks.ImageExport.execute(context, { archiveName : 'image-export.tar.gz' });
+        destContent = await fs.readFile(path.join(tmpDir, 'files/image-export.tar.gz'));
+      } finally {
+        await fs.remove(tmpDir);
+      }
       expect(destContent).to.deep.equal(sourceContent);
     });
   });
