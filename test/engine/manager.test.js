@@ -1,8 +1,10 @@
 'use strict';
 
-const { expect } = require('chai');
-const fs         = require('fs-extra');
-const Manager    = require('../../lib/engine/manager');
+const path        = require('path');
+const fs          = require('fs-extra');
+const { expect }  = require('chai');
+const Manager     = require('../../lib/engine/manager');
+const directories = require('../../lib/directories');
 
 class ManagerEvents {
 
@@ -167,10 +169,12 @@ describe('Manager', () => {
   });
 
   it('Should execute a recipe with real async tasks', async () => {
+    await fs.ensureDir(directories.files());
+    await fs.link(path.resolve(__dirname, '../resources/files/rpi-devel-base.tar.gz'), path.join(directories.files(), 'rpi-devel-base.tar.gz'));
+
     const { result } = await managerScope(async manager => {
-      const source = '/Users/vincent/Downloads/rpi-devel-base.tar.gz';
       manager.createRecipe('recipe', [
-        { type: 'task', name: 'image-import', parameters: { archiveName : source, rootPath : 'mmcblk0p1' } },
+        { type: 'task', name: 'image-import', parameters: { archiveName : 'rpi-devel-base.tar.gz', rootPath : 'mmcblk0p1' } },
         { type: 'task', name: 'config-init', parameters: { } },
         { type: 'task', name: 'image-cache', parameters: { } }
       ]);
@@ -190,7 +194,7 @@ describe('Manager', () => {
       status     : 'ended',
       logs       : [
         { severity : 'info', category : 'recipe',       message: 'begin \'recipe\''                                                                                   },
-        { severity : 'info', category : 'image:import', message: 'import \'/Users/vincent/Downloads/rpi-devel-base.tar.gz\' using root path \'mmcblk0p1\' into image' },
+        { severity : 'info', category : 'image:import', message: 'import \'/tmp/mylife-home-deploy-test-manager/files/rpi-devel-base.tar.gz\' using root path \'mmcblk0p1\' into image' },
         { severity : 'info', category : 'config:init',  message: 'extract config from image file \'rpi-devel.apkovl.tar.gz\''                                         },
         { severity : 'info', category : 'image:cache',  message: 'setup image cache'                                                                                  },
         { severity : 'info', category : 'recipe',       message: 'end \'recipe\''                                                                                     }
@@ -199,11 +203,11 @@ describe('Manager', () => {
   });
 });
 
-const dataDir = '/tmp/mylife-home-deploy-test-recipe';
+const dataDir = '/tmp/mylife-home-deploy-test-manager';
 
 async function dataDirInit() {
   await fs.ensureDir(dataDir);
-  Manager.setDataDirectory(dataDir);
+  directories.configure(dataDir);
 }
 
 async function dataDirDestroy() {
