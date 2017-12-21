@@ -1,16 +1,17 @@
 'use strict';
 
-const { expect }          = require('chai');
-const tasks               = require('../../lib/engine/tasks');
-const vfs                 = require('../../lib/engine/vfs');
+const path        = require('path');
+const fs          = require('fs-extra');
+const { expect }  = require('chai');
+const tasks       = require('../../lib/engine/tasks');
+const vfs         = require('../../lib/engine/vfs');
+const directories = require('../../lib/directories');
 const {
   formatStructure,
   expectConfigContent,
   expectConfigSymlink,
   //printLines
 } = require('./utils');
-
-const source = '/Users/vincent/Downloads/rpi-devel-base.tar.gz';
 
 let cachedRoot;
 
@@ -29,7 +30,7 @@ async function initContext(options = {}) {
 
   const context = { logger };
   await tasks.ImageImport.execute(context, {
-    archiveName : source,
+    archiveName : 'rpi-devel-base.tar.gz',
     rootPath    : 'mmcblk0p1'
   });
   !options.nocache && (cachedRoot = context.root);
@@ -37,6 +38,10 @@ async function initContext(options = {}) {
 }
 
 describe('Tasks', () => {
+
+  beforeEach(() => {
+    directories.configure(path.resolve(__dirname, '../resources'));
+  });
 
   describe('ImageImport', () => {
     it('Should execute properly', async () => {
@@ -82,6 +87,23 @@ describe('Tasks', () => {
   });
 
   // ImageInstall
+
+  describe('ImageExport', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext({ noload : true });
+      const sourceContent = await fs.readFile(path.resolve(__dirname, '../resources/files/rpi-devel-base.tar.gz'));
+      context.image = sourceContent;
+
+      const tmpDir = '/tmp/mylife-home-deploy-test-task-export';
+      directories.configure(tmpDir);
+      await fs.ensureDir(directories.files());
+
+      await tasks.ImageExport.execute(context, { archiveName : 'image-export.tar.gz' });
+
+      const destContent = await fs.readFile(path.join(tmpDir, 'files/image-export.tar.gz'));
+      expect(destContent).to.deep.equal(sourceContent);
+    });
+  });
 
   describe('ImageReset', () => {
     it('Should execute properly', async () => {
