@@ -101,6 +101,30 @@ describe('Tasks', () => {
     });
   });
 
+  describe('ImageDeviceTreeOverlay', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext({ nocache : true });
+      await tasks.ImageDeviceTreeOverlay.execute(context, { content: 'test-overlay1' });
+      await tasks.ImageDeviceTreeOverlay.execute(context, { content: 'test-overlay2' });
+
+      const usercfg  = vfs.readText(context.root, [ 'usercfg.txt' ]);
+      const expected = [ 'dtoverlay=test-overlay1', 'dtoverlay=test-overlay2' ].join('\n') + '\n';
+      expect(usercfg).to.equal(expected);
+    });
+  });
+
+  describe('ImageDeviceTreeParam', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext({ nocache : true });
+      await tasks.ImageDeviceTreeParam.execute(context, { content: 'test-param1' });
+      await tasks.ImageDeviceTreeParam.execute(context, { content: 'test-param2' });
+
+      const usercfg  = vfs.readText(context.root, [ 'usercfg.txt' ]);
+      const expected = [ 'dtparam=test-param1', 'dtparam=test-param2' ].join('\n') + '\n';
+      expect(usercfg).to.equal(expected);
+    });
+  });
+
   // ImageInstall
 
   describe('ImageExport', () => {
