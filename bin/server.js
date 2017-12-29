@@ -5,10 +5,10 @@ const Server = require('../lib/server');
 
 const dev = process.argv.includes('--dev');
 
-const server = new Server(config, dev);
+Server.start(config, dev);
 
 async function terminate() {
-  await server.close();
+  await Server.stop();
   process.exit();
 }
 
