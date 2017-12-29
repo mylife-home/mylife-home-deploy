@@ -1,14 +1,14 @@
 'use strict';
 
 const config = require('../conf/config');
-const Server = require('../lib/server');
+const server = require('../lib/server');
 
 const dev = process.argv.includes('--dev');
 
-Server.start(config, dev);
+server.start(config, dev);
 
 async function terminate() {
-  await Server.stop();
+  await server.stop();
   process.exit();
 }
 
