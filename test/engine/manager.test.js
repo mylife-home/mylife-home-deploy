@@ -124,6 +124,19 @@ describe('Manager', () => {
     ]);
   });
 
+  it('Should persist recipes', async () => {
+    await managerScope(async manager => {
+      manager.createRecipe('recipe1', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
+      manager.createRecipe('recipe2', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+    });
+
+    const { result } = await managerScope(async manager => {
+      return manager.listRecipes();
+    });
+
+    expect(result).to.deep.equal([ 'recipe1', 'recipe2' ]);
+  });
+
   it('Should execute a simple recipe', async () => {
     const { result, events } = await managerScope(async manager => {
       manager.createRecipe('recipe', [
