@@ -65,6 +65,12 @@ async function waitTaskEnd(manager, runId) {
   });
 }
 
+function stripRunTimes(run) {
+  delete run.creation;
+  delete run.end;
+  return run;
+}
+
 describe('Manager', () => {
 
   beforeEach(dataDirInit);
@@ -150,17 +156,17 @@ describe('Manager', () => {
 
       return {
         runs : manager.listRuns(),
-        run  : manager.getRun(runId)
+        run  : stripRunTimes(manager.getRun(runId))
       };
     });
 
     expect(result).to.deep.equal({
       runs : [ 1 ],
       run  : {
-        id         : 1,
-        recipeName : 'recipe',
-        status     : 'ended',
-        logs       : [
+        id     : 1,
+        recipe : 'recipe',
+        status : 'ended',
+        logs   : [
           { severity : 'info', category : 'recipe',        message : 'begin \'recipe\''   },
           { severity : 'info', category : 'variables:set', message : 'variable1 = value1' },
           { severity : 'info', category : 'variables:set', message : 'variable2 = value2' },
@@ -195,16 +201,16 @@ describe('Manager', () => {
 
       await waitTaskEnd(manager, runId);
 
-      return manager.getRun(runId);
+      return stripRunTimes(manager.getRun(runId));
     });
 
     result.logs = result.logs.filter(it => it.severity !== 'debug');
 
     expect(result).to.deep.equal({
-      id         : 1,
-      recipeName : 'recipe',
-      status     : 'ended',
-      logs       : [
+      id     : 1,
+      recipe : 'recipe',
+      status : 'ended',
+      logs   : [
         { severity : 'info', category : 'recipe',       message: 'begin \'recipe\''                                                                                   },
         { severity : 'info', category : 'image:import', message: 'import \'/tmp/mylife-home-deploy-test-manager/files/rpi-devel-base.tar.gz\' using root path \'mmcblk0p1\' into image' },
         { severity : 'info', category : 'config:init',  message: 'extract config from image file \'rpi-devel.apkovl.tar.gz\''                                         },
