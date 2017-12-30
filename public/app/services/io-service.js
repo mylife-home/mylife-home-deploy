@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import { actionTypes } from '../constants/index';
 import { ioOnlineSet } from '../actions/online';
 import { ioRecipeSet, ioRecipeDeleted } from '../actions/recipes';
+import { ioRunSet, ioRunLog, ioRunDeleted } from '../actions/runs';
 
 const eventToActionMap = {};
 const actionToEventMap = {};
@@ -17,6 +18,12 @@ registerEventToAction('recipe:deleted', ioRecipeDeleted);
 registerActionToEvent(actionTypes.RECIPE_CREATE, 'recipe:create');
 registerActionToEvent(actionTypes.RECIPE_DELETE, 'recipe:delete');
 registerActionToEvent(actionTypes.RECIPE_START,  'recipe:start');
+
+registerEventToAction('run:created', ioRunSet);
+registerEventToAction('run:begin',   ioRunSet);
+registerEventToAction('run:end',     ioRunSet);
+registerEventToAction('run:deleted', ioRunDeleted);
+registerEventToAction('run:log',     ioRunLog);
 
 // ---
 

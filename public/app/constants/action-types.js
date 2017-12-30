@@ -18,5 +18,8 @@ export default wrap({
   RECIPE_SET     : null,
   RECIPE_DELETED : null,
 
+  RUN_SET        : null,
+  RUN_LOG        : null,
+  RUN_DELETED    : null,
 });
 
