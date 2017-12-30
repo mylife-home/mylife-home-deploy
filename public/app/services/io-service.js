@@ -3,6 +3,7 @@
 import io from 'socket.io-client';
 import { actionTypes } from '../constants/index';
 import { ioOnlineSet } from '../actions/online';
+import { ioTaskSet } from '../actions/tasks';
 import { ioRecipeSet, ioRecipeDeleted } from '../actions/recipes';
 import { ioRunSet, ioRunLog, ioRunDeleted } from '../actions/runs';
 
@@ -10,6 +11,8 @@ const eventToActionMap = {};
 const actionToEventMap = {};
 
 // CONFIG
+
+registerEventToAction('task:created', ioTaskSet);
 
 registerEventToAction('recipe:created', ioRecipeSet);
 registerEventToAction('recipe:updated', ioRecipeSet);
