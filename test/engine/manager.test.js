@@ -76,6 +76,95 @@ describe('Manager', () => {
   beforeEach(dataDirInit);
   afterEach(dataDirDestroy);
 
+  it('Should provide metadata of tasks', async () => {
+    const { result } = await managerScope(async manager => manager.listTasksMeta());
+
+    expect(result).to.deep.equal([ {
+      name        : 'config-init',
+      description : 'Extract the config (.apkovl.tar.gz) from the image to context.config',
+      parameters  : []
+    }, {
+      name        : 'config-hostname',
+      description : 'set the hostname',
+      parameters  : [
+        { name : 'hostname', description : 'host name', type : 'string', default : 'rpi-devel' }
+      ]
+    }, {
+      name        : 'config-wifi'
+    }, {
+      name        : 'config-package',
+      description : 'add a package to be installed',
+      parameters  : [
+        { name : 'name', description : 'package name', type : 'string' }
+      ]
+    }, {
+      name        : 'config-daemon',
+      description : 'add a daemon process to be started at a runlevel',
+      parameters  : [
+        { name : 'name',     description : 'daemon name', type : 'string' },
+        { name : 'runlevel', description : 'runlevel',    type : 'string', default : 'default' }
+      ]
+    }, {
+      name        : 'config-core-components'
+    }, {
+      name        : 'image-import',
+      description : 'import the specified archive into the root fs of the image',
+      parameters  : [
+        { name : 'archiveName', description : 'archive name',                           type : 'string', default : 'rpi-devel-base.tar.gz' },
+        { name : 'rootPath',    description : 'path of the root fs inside the archive', type : 'string', default : 'mmcblk0p1' }
+      ]
+    }, {
+      name        : 'image-remove',
+      description : 'remove a node (file/directory/symlink) from the root fs',
+      parameters  : [
+        { name : 'path', description : 'path to remove name', type : 'string' }
+      ]
+    }, {
+      name        : 'image-cache',
+      description : 'setup package cache of the image, from /etc/apk/repositories and /etc/apk/world in config (equivalent of apk cache sync in some way)',
+      parameters  : []
+    }, {
+      name        : 'image-device-tree-overlay',
+      description : 'add a dtoverlay line in image usercfg.txt ( https://www.raspberrypi.org/documentation/configuration/device-tree.md )',
+      parameters  : [
+        { name : 'content', description : 'overlay data to add', type : 'string' }
+      ]
+    }, {
+      name        : 'image-device-tree-param',
+      description : 'add a dtparam line in image usercfg.txt ( https://www.raspberrypi.org/documentation/configuration/device-tree.md )',
+      parameters  : [
+        { name : 'content', description : 'param data to add', type : 'string' }
+      ]
+    }, {
+      name        : 'image-pack',
+      description : 'pack the config into the root fs, then the root fs into an archive',
+      parameters  : []
+    }, {
+      name        : 'image-install'
+    }, {
+      name        : 'image-export',
+      description : 'import the specified archive into the root fs of the image',
+      parameters  : [
+        { name : 'archiveName', description : 'archive name', type : 'string' }
+      ]
+    }, {
+      name        : 'image-reset',
+      description : 'reset image data (root fs, config, image)',
+      parameters  : []
+    }, {
+      name        : 'variables-set',
+      description : 'set a variable to a value',
+      parameters  : [
+        { name : 'name',  description : 'variable name',  type : 'string' },
+        { name : 'value', description : 'variable value', type : 'string' }
+      ]
+    }, {
+      name        : 'variables-reset',
+      description : 'reset variables',
+      parameters  : []
+    } ]);
+  });
+
   it('Should create and retrieve a simple recipe', async () => {
     const { result, events } = await managerScope(async manager => {
       manager.createRecipe('recipe', { steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }] });
