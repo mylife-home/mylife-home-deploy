@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import { actionTypes } from '../constants/index';
 import { ioOnlineSet } from '../actions/online';
 import { ioTaskSet } from '../actions/tasks';
-import { ioRecipeSet, ioRecipeDeleted } from '../actions/recipes';
+import { ioRecipeSet, ioRecipeDeleted, ioRecipePinned, ioRecipeUnpinned } from '../actions/recipes';
 import { ioRunSet, ioRunLog, ioRunDeleted } from '../actions/runs';
 
 const eventToActionMap = {};
@@ -14,13 +14,17 @@ const actionToEventMap = {};
 
 registerEventToAction('task:created', ioTaskSet);
 
-registerEventToAction('recipe:created', ioRecipeSet);
-registerEventToAction('recipe:updated', ioRecipeSet);
-registerEventToAction('recipe:deleted', ioRecipeDeleted);
+registerEventToAction('recipe:created',  ioRecipeSet);
+registerEventToAction('recipe:updated',  ioRecipeSet);
+registerEventToAction('recipe:deleted',  ioRecipeDeleted);
+registerEventToAction('recipe:pinned',   ioRecipePinned);
+registerEventToAction('recipe:unpinned', ioRecipeUnpinned);
 
 registerActionToEvent(actionTypes.RECIPE_CREATE, 'recipe:create');
 registerActionToEvent(actionTypes.RECIPE_DELETE, 'recipe:delete');
 registerActionToEvent(actionTypes.RECIPE_START,  'recipe:start');
+registerActionToEvent(actionTypes.RECIPE_PIN,    'recipe:pin');
+registerActionToEvent(actionTypes.RECIPE_UNPIN,  'recipe:unpin');
 
 registerEventToAction('run:created', ioRunSet);
 registerEventToAction('run:begin',   ioRunSet);
