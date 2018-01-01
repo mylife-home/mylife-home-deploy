@@ -78,11 +78,11 @@ describe('Manager', () => {
 
   it('Should create and retrieve a simple recipe', async () => {
     const { result, events } = await managerScope(async manager => {
-      manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
+      manager.createRecipe('recipe', { steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }] });
       return manager.getRecipe('recipe');
     });
 
-    expect(result).to.deep.equal([{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
+    expect(result).to.deep.equal({ steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }] });
     expect(events).to.deep.equal([
       { name: 'recipe-created', args: [ 'recipe' ] }
     ]);
@@ -90,7 +90,7 @@ describe('Manager', () => {
 
   it('Should delete a simple recipe', async () => {
     const { result, events } = await managerScope(async manager => {
-      manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
+      manager.createRecipe('recipe', { steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }] });
       manager.deleteRecipe('recipe');
       return manager.listRecipes();
     });
@@ -104,12 +104,12 @@ describe('Manager', () => {
 
   it('Should update a simple recipe', async () => {
     const { result, events } = await managerScope(async manager => {
-      manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
-      manager.createRecipe('recipe', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+      manager.createRecipe('recipe', { steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }] });
+      manager.createRecipe('recipe', { steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }] });
       return manager.getRecipe('recipe');
     });
 
-    expect(result).to.deep.equal([{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+    expect(result).to.deep.equal({ steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }] });
     expect(events).to.deep.equal([
       { name: 'recipe-created', args: [ 'recipe' ] },
       { name: 'recipe-updated', args: [ 'recipe' ] }
@@ -118,8 +118,8 @@ describe('Manager', () => {
 
   it('Should list recipes', async () => {
     const { result, events } = await managerScope(async manager => {
-      manager.createRecipe('recipe1', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
-      manager.createRecipe('recipe2', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+      manager.createRecipe('recipe1', { steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }] });
+      manager.createRecipe('recipe2', { steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }] });
       return manager.listRecipes();
     });
 
@@ -132,8 +132,8 @@ describe('Manager', () => {
 
   it('Should persist recipes', async () => {
     await managerScope(async manager => {
-      manager.createRecipe('recipe1', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }]);
-      manager.createRecipe('recipe2', [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }]);
+      manager.createRecipe('recipe1', { steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } }] });
+      manager.createRecipe('recipe2', { steps : [{ type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }] });
     });
 
     const { result } = await managerScope(async manager => {
@@ -145,10 +145,10 @@ describe('Manager', () => {
 
   it('Should execute a simple recipe', async () => {
     const { result, events } = await managerScope(async manager => {
-      manager.createRecipe('recipe', [
+      manager.createRecipe('recipe', { steps : [
         { type: 'task', name: 'variables-set', parameters: { name: 'variable1', value: 'value1' } },
         { type: 'task', name: 'variables-set', parameters: { name: 'variable2', value: 'value2' } }
-      ]);
+      ]});
 
       const runId = manager.startRecipe('recipe');
 
@@ -192,10 +192,10 @@ describe('Manager', () => {
     await fs.link(path.resolve(__dirname, '../resources/files/rpi-devel-base.tar.gz'), path.join(directories.files(), 'rpi-devel-base.tar.gz'));
 
     const { result } = await managerScope(async manager => {
-      manager.createRecipe('recipe', [
+      manager.createRecipe('recipe', { steps : [
         { type: 'task', name: 'image-import', parameters: { archiveName : 'rpi-devel-base.tar.gz', rootPath : 'mmcblk0p1' } },
         { type: 'task', name: 'config-init', parameters: { } }
-      ]);
+      ]});
 
       const runId = manager.startRecipe('recipe');
 
