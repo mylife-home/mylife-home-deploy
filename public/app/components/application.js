@@ -18,7 +18,11 @@ const Application = () => (
 
       <Sidebar.Pushable as={Segment} style={{ flex: 1, margin: 0 }}>
         <Sidebar animation='push' width='wide' visible>
-          <Menu />
+          <Menu
+            onRecipeListClick={() => console.log('recipe-list')} onRecipeClick={recipe => console.log('recipe', recipe)}
+            onRunListClick={() => console.log('run-list')} onRunClick={run => console.log('run', run)}
+            onFileListClick={() => console.log('file-list')}
+          />
         </Sidebar>
         <Sidebar.Pusher>
           <Segment basic>
