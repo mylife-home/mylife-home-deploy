@@ -6,7 +6,7 @@ import { Button, Header, Modal } from 'semantic-ui-react';
 
 const DialogInfo = ({ info, onClose }) => (
   <Modal open={!!info} onClose={onClose}>
-    <Header icon='browser' content='Error' />
+    <Header icon='info circle' content='Error' />
     <Modal.Content>
       <h3>{info}</h3>
     </Modal.Content>

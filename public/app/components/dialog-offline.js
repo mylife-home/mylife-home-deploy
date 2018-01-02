@@ -6,7 +6,7 @@ import { Header, Modal } from 'semantic-ui-react';
 
 const DialogOffline = ({ online }) => (
   <Modal open={!online} closeOnEscape={false} closeOnRootNodeClick={false} size='mini'>
-    <Header icon='browser' content='Offline' />
+    <Header icon='lightning' content='Offline' />
     <Modal.Content>
       <h3>You are not connected</h3>
     </Modal.Content>

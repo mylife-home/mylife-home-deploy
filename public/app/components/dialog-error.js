@@ -6,7 +6,7 @@ import { Button, Header, Modal } from 'semantic-ui-react';
 
 const DialogError = ({ error, onClose }) => (
   <Modal open={!!error} onClose={onClose}>
-    <Header icon='browser' content='Error' />
+    <Header icon='remove circle' content='Error' />
     <Modal.Content>
       <h3>{error && error.toString()}</h3>
     </Modal.Content>
