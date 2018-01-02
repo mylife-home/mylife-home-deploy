@@ -15,7 +15,7 @@ const AppMenu = ({ recipes, runs, onRecipeListClick, onRecipeClick, onRunListCli
           </Menu.Header>
         </Menu.Item>
         {recipes.map(recipe =>
-          <Menu.Item key={recipe.name} name={recipe.name} onClick={() => onRecipeClick(recipe.name)}>
+          <Menu.Item key={recipe.name} onClick={() => onRecipeClick(recipe.name)}>
             <Menu.Header align='left' style={{ marginLeft: '1em' }}>
               <Icon name='file text outline' />
               {recipe.name}
@@ -33,7 +33,7 @@ const AppMenu = ({ recipes, runs, onRecipeListClick, onRecipeClick, onRunListCli
           </Menu.Header>
         </Menu.Item>
         {runs.map(run =>
-          <Menu.Item key={run.id} name={run.id} onClick={() => onRunClick(run.id)}>
+          <Menu.Item key={run.id} onClick={() => onRunClick(run.id)}>
             <Menu.Header align='left' style={{ marginLeft: '1em' }}>
               <Icon name='play' /> { /* running */ }
               <Icon name='checkmark' /> { /* success */ }
