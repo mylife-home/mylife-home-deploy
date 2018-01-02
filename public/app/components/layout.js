@@ -12,6 +12,12 @@ class Application extends React.Component {
   constructor(props) {
     super(props);
     this.state = { type: null, value: null };
+
+    this.onRecipeListClick = ()     => this.setState({ type : 'recipe-list', value : null   });
+    this.onRecipeClick     = recipe => this.setState({ type : 'recipe',      value : recipe });
+    this.onRunListClick    = ()     => this.setState({ type : 'run-list',    value : null   });
+    this.onRunClick        = run    => this.setState({ type : 'run',         value : run    });
+    this.onFileListClick   = ()     => this.setState({ type : 'file-list',   value : null   });
   }
 
   renderContent() {
@@ -19,7 +25,7 @@ class Application extends React.Component {
     switch(type) {
 
       case 'recipe-list':
-        return (<RecipeList />);
+        return (<RecipeList onRecipeClick={this.onRecipeClick}/>);
 
       case 'recipe':
         return (<Recipe recipe={value}/>);
@@ -38,11 +44,11 @@ class Application extends React.Component {
         <Sidebar.Pushable as={Segment} style={{ flex: 1, margin: 0 }}>
           <Sidebar animation='push' width='wide' visible>
             <Menu
-              onRecipeListClick = {()     => this.setState({ type : 'recipe-list', value : null   }) }
-              onRecipeClick     = {recipe => this.setState({ type : 'recipe',      value : recipe }) }
-              onRunListClick    = {()     => this.setState({ type : 'run-list',    value : null   }) }
-              onRunClick        = {run    => this.setState({ type : 'run',         value : run    }) }
-              onFileListClick   = {()     => this.setState({ type : 'file-list',   value : null   }) }
+              onRecipeListClick = {this.onRecipeListClick}
+              onRecipeClick     = {this.onRecipeClick    }
+              onRunListClick    = {this.onRunListClick   }
+              onRunClick        = {this.onRunClick       }
+              onFileListClick   = {this.onFileListClick  }
             />
           </Sidebar>
           <Sidebar.Pusher>
