@@ -2,12 +2,12 @@
 
 import { connect } from 'react-redux';
 
-import RecipeList                                            from '../components/recipe-list';
-import { getRecipesWithPin }                                 from '../selectors/recipes';
+import Recipe                                                from '../components/recipe';
+import { getRecipe }                                         from '../selectors/recipes';
 import { pinRecipe, unpinRecipe, startRecipe, deleteRecipe } from '../actions/recipes';
 
-const mapStateToProps = state => ({
-  recipes : getRecipesWithPin(state)
+const mapStateToProps = (state, { recipe }) => ({
+  recipe : getRecipe(state, recipe)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -17,9 +17,9 @@ const mapDispatchToProps = dispatch => ({
   onRecipeDelete : recipe => dispatch(deleteRecipe({ name : recipe }))
 });
 
-const RecipeListContainer = connect(
+const RecipeContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(RecipeList);
+)(Recipe);
 
-export default RecipeListContainer;
+export default RecipeContainer;

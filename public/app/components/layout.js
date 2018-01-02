@@ -5,6 +5,7 @@ import { Sidebar, Segment, Header, Image } from 'semantic-ui-react';
 
 import Menu       from '../containers/menu-container';
 import RecipeList from '../containers/recipe-list-container';
+import Recipe     from '../containers/recipe-container';
 
 class Application extends React.Component {
 
@@ -18,9 +19,10 @@ class Application extends React.Component {
     switch(type) {
 
       case 'recipe-list':
-        return (
-          <RecipeList />
-        );
+        return (<RecipeList />);
+
+      case 'recipe':
+        return (<Recipe recipe={value}/>);
     }
 
     return null;
@@ -30,10 +32,7 @@ class Application extends React.Component {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Segment fixed='top' textAlign='center' as='header' style={{ margin: 0 }}>
-          <Header as='h1'>
-            <Image size='small' src='/images/favicon.ico' style={{ marginRight: '1.5em' }} />
-            Mylife Home Deploy
-          </Header>
+          <Header as='h1' image={<Image size='small' src='/images/favicon.ico' />} content='Mylife Home Deploy' />
         </Segment>
 
         <Sidebar.Pushable as={Segment} style={{ flex: 1, margin: 0 }}>
@@ -47,9 +46,7 @@ class Application extends React.Component {
             />
           </Sidebar>
           <Sidebar.Pusher>
-            <Segment basic>
-              {this.renderContent()}
-            </Segment>
+            {this.renderContent()}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
       </div>
