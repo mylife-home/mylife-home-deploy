@@ -12,7 +12,7 @@ const StoreProvider = (props) => (
 );
 
 StoreProvider.propTypes = {
-  children: PropTypes.node
+  children : PropTypes.node
 };
 
 export default StoreProvider;

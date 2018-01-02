@@ -17,8 +17,8 @@ const DialogInfo = ({ info, onClose }) => (
 );
 
 DialogInfo.propTypes = {
-  info: PropTypes.object,
-  onClose: PropTypes.func.isRequired
+  info    : PropTypes.object,
+  onClose : PropTypes.func.isRequired
 };
 
 export default DialogInfo;

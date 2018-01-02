@@ -17,8 +17,8 @@ const DialogError = ({ error, onClose }) => (
 );
 
 DialogError.propTypes = {
-  error: PropTypes.object,
-  onClose: PropTypes.func.isRequired
+  error   : PropTypes.object,
+  onClose : PropTypes.func.isRequired
 };
 
 export default DialogError;

@@ -1,15 +1,29 @@
 'use strict';
 
-import React from 'react';
+import React                               from 'react';
 import { Sidebar, Segment, Header, Image } from 'semantic-ui-react';
 
-import Menu from '../containers/menu-container';
+import Menu       from '../containers/menu-container';
+import RecipeList from '../containers/recipe-list-container';
 
 class Application extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { active: null };
+    this.state = { type: null, value: null };
+  }
+
+  renderContent() {
+    const { type, value } = this.state;
+    switch(type) {
+
+      case 'recipe-list':
+        return (
+          <RecipeList />
+        );
+    }
+
+    return null;
   }
 
   render() {
@@ -25,14 +39,16 @@ class Application extends React.Component {
         <Sidebar.Pushable as={Segment} style={{ flex: 1, margin: 0 }}>
           <Sidebar animation='push' width='wide' visible>
             <Menu
-              onRecipeListClick={() => console.log('recipe-list')} onRecipeClick={recipe => console.log('recipe', recipe)}
-              onRunListClick={() => console.log('run-list')} onRunClick={run => console.log('run', run)}
-              onFileListClick={() => console.log('file-list')}
+              onRecipeListClick = {()     => this.setState({ type : 'recipe-list', value : null   }) }
+              onRecipeClick     = {recipe => this.setState({ type : 'recipe',      value : recipe }) }
+              onRunListClick    = {()     => this.setState({ type : 'run-list',    value : null   }) }
+              onRunClick        = {run    => this.setState({ type : 'run',         value : run    }) }
+              onFileListClick   = {()     => this.setState({ type : 'file-list',   value : null   }) }
             />
           </Sidebar>
           <Sidebar.Pusher>
             <Segment basic>
-              <Header as='h3'>Application Content</Header>
+              {this.renderContent()}
             </Segment>
           </Sidebar.Pusher>
         </Sidebar.Pushable>

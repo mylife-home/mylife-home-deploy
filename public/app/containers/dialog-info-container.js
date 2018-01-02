@@ -1,16 +1,16 @@
 'use strict';
 
-import { connect } from 'react-redux';
+import { connect }   from 'react-redux';
+import { getInfo }   from '../selectors/dialogs';
 import { clearInfo } from '../actions/dialogs';
 
 import DialogInfo from '../components/dialog-info';
 
 const mapStateToProps = () => {
   return (state) => ({
-    info : state.info
+    info : getInfo(state)
   });
 };
-
 
 const mapDispatchToProps = (dispatch) => ({
   onClose : () => dispatch(clearInfo()),

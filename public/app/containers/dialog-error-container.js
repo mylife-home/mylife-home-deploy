@@ -1,13 +1,14 @@
 'use strict';
 
-import { connect } from 'react-redux';
+import { connect }    from 'react-redux';
+import { getError }   from '../selectors/dialogs';
 import { clearError } from '../actions/dialogs';
 
 import DialogError from '../components/dialog-error';
 
 const mapStateToProps = () => {
   return (state) => ({
-    error : state.errors
+    error : getError(state)
   });
 };
 
