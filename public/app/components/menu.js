@@ -1,7 +1,7 @@
 'use strict';
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React          from 'react';
+import PropTypes      from 'prop-types';
 import { Menu, Icon } from 'semantic-ui-react';
 
 const AppMenu = ({ recipes, runs, onRecipeListClick, onRecipeClick, onRunListClick, onRunClick, onFileListClick }) => (

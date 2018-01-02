@@ -1,7 +1,7 @@
 'use strict';
 
 import { createAction } from 'redux-actions';
-import { actionTypes } from '../constants';
+import { actionTypes }  from '../constants';
 
 export const createRecipe     = createAction(actionTypes.RECIPE_CREATE);
 export const deleteRecipe     = createAction(actionTypes.RECIPE_DELETE);
