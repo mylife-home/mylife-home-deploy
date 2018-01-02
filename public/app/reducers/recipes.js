@@ -6,6 +6,18 @@ import Immutable from 'immutable';
 
 export default handleActions({
 
+  [actionTypes.ONLINE_SET] : {
+    next : (state, action) => {
+      if(action.payload) { return state; }
+      // disconnection
+      return {
+        ...state,
+        all    : state.all.clear(),
+        pinned : state.pinned.clear()
+      };
+    }
+  },
+
   [actionTypes.RECIPE_SET] : {
     next : (state, action) => {
       const recipe = action.payload;
