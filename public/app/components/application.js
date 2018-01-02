@@ -1,35 +1,27 @@
 'use strict';
 
 import React from 'react';
-import { Sidebar, Segment, Header, Image } from 'semantic-ui-react';
-import { StoreProvider } from './utils';
+import StoreProvider from './store-provider';
+import Layout from './layout';
+import DialogError from '../containers/dialog-error-container';
+import DialogInfo from '../containers/dialog-info-container';
 
-import Menu from '../containers/menu-container';
+const styles = {
+  root: {
+    position : 'fixed',
+    top      : 0,
+    bottom   : 0,
+    left     : 0,
+    right    : 0
+  }
+};
 
 const Application = () => (
   <StoreProvider>
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Segment fixed='top' textAlign='center' as='header' style={{ margin: 0 }}>
-        <Header as='h1'>
-          <Image size='small' src='/images/favicon.ico' style={{ marginRight: '1.5em' }} />
-          Mylife Home Deploy
-        </Header>
-      </Segment>
-
-      <Sidebar.Pushable as={Segment} style={{ flex: 1, margin: 0 }}>
-        <Sidebar animation='push' width='wide' visible>
-          <Menu
-            onRecipeListClick={() => console.log('recipe-list')} onRecipeClick={recipe => console.log('recipe', recipe)}
-            onRunListClick={() => console.log('run-list')} onRunClick={run => console.log('run', run)}
-            onFileListClick={() => console.log('file-list')}
-          />
-        </Sidebar>
-        <Sidebar.Pusher>
-          <Segment basic>
-            <Header as='h3'>Application Content</Header>
-          </Segment>
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
+    <div style={styles.root}>
+      <Layout />
+      <DialogError />
+      <DialogInfo />
     </div>
   </StoreProvider>
 );

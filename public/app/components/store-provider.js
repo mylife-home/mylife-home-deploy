@@ -1,8 +1,8 @@
 'use strict';
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import store from '../../services/store-factory';
+import React        from 'react';
+import PropTypes    from 'prop-types';
+import store        from '../services/store-factory';
 import { Provider } from 'react-redux';
 
 const StoreProvider = (props) => (
