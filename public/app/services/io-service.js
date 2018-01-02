@@ -1,7 +1,7 @@
 'use strict';
 
 import io from 'socket.io-client';
-import { actionTypes } from '../constants/index';
+import { actionTypes } from '../constants';
 import { ioOnlineSet } from '../actions/online';
 import { ioTaskSet } from '../actions/tasks';
 import { ioRecipeSet, ioRecipeDeleted, ioRecipePinned, ioRecipeUnpinned } from '../actions/recipes';

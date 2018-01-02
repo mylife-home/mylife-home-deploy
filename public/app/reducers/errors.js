@@ -1,6 +1,6 @@
 'use strict';
 
-import { actionTypes } from '../constants/index';
+import { actionTypes } from '../constants';
 
 export default function(state = null, action) {
   if(action.error) {

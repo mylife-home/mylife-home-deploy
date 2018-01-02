@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 
 import ioService from './io-service';
-import reducer from '../reducers/index';
+import reducer from '../reducers';
 
 const store = createStore(
   reducer,

@@ -1,7 +1,3 @@
 'use strict';
 
-import actionTypes from './action-types';
-
-export {
-  actionTypes,
-};
+export { default as actionTypes } from './action-types';
