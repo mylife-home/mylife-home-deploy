@@ -1,19 +1,22 @@
 'use strict';
 
-import React          from 'react';
-import PropTypes      from 'prop-types';
-import { Menu, Icon } from 'semantic-ui-react';
+import React                 from 'react';
+import PropTypes             from 'prop-types';
+import { Menu, Icon }        from 'semantic-ui-react';
+import { runStatusIconName } from './tools';
 
 const AppMenu = ({ recipes, runs, onRecipeListClick, onRecipeClick, onRunListClick, onRunClick, onFileListClick }) => (
   <Menu icon='labeled' size='small' vertical fluid fixed='left'>
     <Menu.Item>
       <Menu.Menu>
+
         <Menu.Item onClick={onRecipeListClick}>
           <Menu.Header align='left' style={{ fontSize: '1.2em' }}>
             <Icon name='file text outline' />
             Recipes
           </Menu.Header>
         </Menu.Item>
+
         {recipes.map(recipe =>
           <Menu.Item key={recipe.name} onClick={() => onRecipeClick(recipe.name)}>
             <Menu.Header align='left' style={{ marginLeft: '1em' }}>
@@ -22,36 +25,40 @@ const AppMenu = ({ recipes, runs, onRecipeListClick, onRecipeClick, onRunListCli
             </Menu.Header>
           </Menu.Item>
         )}
+
       </Menu.Menu>
     </Menu.Item>
     <Menu.Item>
       <Menu.Menu>
+
         <Menu.Item onClick={onRunListClick}>
           <Menu.Header align='left' style={{ fontSize: '1.2em' }}>
             <Icon name='tasks' />
             Runs
           </Menu.Header>
         </Menu.Item>
+
         {runs.map(run =>
           <Menu.Item key={run.id} onClick={() => onRunClick(run.id)}>
             <Menu.Header align='left' style={{ marginLeft: '1em' }}>
-              <Icon name='play' /> { /* running */ }
-              <Icon name='checkmark' /> { /* success */ }
-              <Icon name='remove' /> { /* error */ }
-              {run.id}
+              <Icon name={runStatusIconName(run)} />
+              {`#${run.id} - ${run.recipe}`}
             </Menu.Header>
           </Menu.Item>
         )}
+
       </Menu.Menu>
     </Menu.Item>
     <Menu.Item>
       <Menu.Menu>
+
         <Menu.Item onClick={onFileListClick}>
           <Menu.Header align='left' style={{ fontSize: '1.2em' }}>
             <Icon name='folder outline' />
             Files
           </Menu.Header>
         </Menu.Item>
+
       </Menu.Menu>
     </Menu.Item>
   </Menu>
