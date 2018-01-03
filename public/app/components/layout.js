@@ -6,6 +6,9 @@ import { Sidebar, Segment, Header, Image } from 'semantic-ui-react';
 import Menu       from '../containers/menu-container';
 import RecipeList from '../containers/recipe-list-container';
 import Recipe     from '../containers/recipe-container';
+import RunList    from '../containers/run-list-container';
+import Run        from '../containers/run-container';
+import FileList   from '../containers/file-list-container';
 
 class Application extends React.Component {
 
@@ -29,6 +32,16 @@ class Application extends React.Component {
 
       case 'recipe':
         return (<Recipe recipe={value}/>);
+
+      case 'run-list':
+        return (<RunList onRunClick={this.onRunClick}/>);
+
+      case 'run':
+        return (<Run run={value}/>);
+
+
+      case 'file-list':
+        return (<FileList />);
     }
 
     return null;
