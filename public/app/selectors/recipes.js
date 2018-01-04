@@ -14,4 +14,6 @@ export const getRecipesWithPin = state => state.recipes.all
   .sortBy(recipe => recipe.name)
   .map(recipe => ({ recipe, pinned : state.recipes.pinned.has(recipe.name) }));
 
+export const getRecipeNames = state => state.recipes.all.keySeq();
+
 export const getRecipe = (state, value) => state.recipes.all.get(value);

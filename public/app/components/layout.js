@@ -1,6 +1,7 @@
 'use strict';
 
 import React                               from 'react';
+import PropTypes                           from 'prop-types';
 import { Sidebar, Segment, Header, Image } from 'semantic-ui-react';
 
 import Menu       from '../containers/menu-container';
@@ -10,7 +11,7 @@ import RunList    from '../containers/run-list-container';
 import Run        from '../containers/run-container';
 import FileList   from '../containers/file-list-container';
 
-class Application extends React.Component {
+class Layout extends React.Component {
 
   constructor(props) {
     super(props);
@@ -21,6 +22,27 @@ class Application extends React.Component {
     this.onRunListClick    = ()     => this.setState({ type : 'run-list',    value : null   });
     this.onRunClick        = run    => this.setState({ type : 'run',         value : run    });
     this.onFileListClick   = ()     => this.setState({ type : 'file-list',   value : null   });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    switch(this.state.type) {
+
+      case 'recipe': {
+        const nextRecipes = nextProps.recipes;
+        if(this.props.recipes === nextRecipes) { return; }
+        if(!nextRecipes.has(this.state.value)) { return; }
+        this.setState({ type: null, value: null });
+        return;
+      }
+
+      case 'run': {
+        const nextRuns = nextProps.runs;
+        if(this.props.runs === nextRuns) { return; }
+        if(nextRuns.has(this.state.value)) { return; }
+        this.setState({ type: null, value: null });
+        return;
+      }
+    }
   }
 
   renderContent() {
@@ -73,4 +95,9 @@ class Application extends React.Component {
   }
 }
 
-export default Application;
+Layout.propTypes = {
+  recipes : PropTypes.object.isRequired,
+  runs    : PropTypes.object.isRequired
+};
+
+export default Layout;

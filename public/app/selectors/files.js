@@ -1,3 +1,3 @@
 'use strict';
 
-export const getFiles = state => ({});
+export const getFiles = state => state.files;

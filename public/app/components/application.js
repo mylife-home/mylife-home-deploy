@@ -2,7 +2,7 @@
 
 import React         from 'react';
 import StoreProvider from './store-provider';
-import Layout        from './layout';
+import Layout        from '../containers/layout-container';
 import DialogOffline from '../containers/dialog-offline-container';
 import DialogError   from '../containers/dialog-error-container';
 import DialogInfo    from '../containers/dialog-info-container';

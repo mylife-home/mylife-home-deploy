@@ -6,6 +6,7 @@ import info    from './info';
 import tasks   from './tasks';
 import recipes from './recipes';
 import runs    from './runs';
+import files   from './files';
 
 export default combineReducers({
   online,
@@ -13,5 +14,6 @@ export default combineReducers({
   info,
   tasks,
   recipes,
-  runs
+  runs,
+  files
 });
