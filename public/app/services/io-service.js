@@ -36,6 +36,7 @@ registerEventToAction('run:log',     ioRunLog);
 registerActionToEvent(actionTypes.FILE_DELETE, 'file:delete');
 
 registerEventToAction('file:created', ioFileSet);
+registerEventToAction('file:updated', ioFileSet);
 registerEventToAction('file:deleted', ioFileDeleted);
 
 // ---

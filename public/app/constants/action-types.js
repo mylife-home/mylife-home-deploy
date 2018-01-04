@@ -28,6 +28,7 @@ export default wrap({
   RUN_LOG         : null,
   RUN_DELETED     : null,
 
+  FILE_UPLOAD     : null,
   FILE_DOWNLOAD   : null,
   FILE_DELETE     : null,
   FILE_SET        : null,

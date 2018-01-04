@@ -12,6 +12,7 @@ export default (/*store*/) => next => action => {
       pom.setAttribute('href', `/files/${name}`);
       pom.setAttribute('download', name);
       pom.click();
+      pom.remove();
 
       break;
     }
