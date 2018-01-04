@@ -16,6 +16,13 @@ const styles = {
     display       : 'flex',
     flexDirection : 'column',
     minHeight     : '100vh'
+  },
+  fixed : {
+    position : 'fixed',
+    top      : 0,
+    bottom   : 0,
+    left     : 0,
+    right    : 0
   }
 };
 
@@ -94,7 +101,7 @@ class Layout extends React.Component {
               onFileListClick   = {this.onFileListClick  }
             />
           </Sidebar>
-          <Sidebar.Pusher>
+          <Sidebar.Pusher style={styles.fixed}>
             {this.renderContent()}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
