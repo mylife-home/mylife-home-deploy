@@ -1,17 +1,13 @@
 'use strict';
 
-import React                                          from 'react';
-import PropTypes                                      from 'prop-types';
-import { Segment, Header, Item, Icon, Button, Popup } from 'semantic-ui-react';
-import confirm                                        from './confirm-dialog';
+import React                         from 'react';
+import PropTypes                     from 'prop-types';
+import { Item, Icon, Button, Popup } from 'semantic-ui-react';
+import LayoutContent                 from './layout-content';
+import confirm                       from './confirm-dialog';
 
 const RecipeList = ({ recipes, onRecipeClick, onRecipePin, onRecipeUnpin, onRecipeStart, onRecipeDelete }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-
-    <Segment fixed='top' basic>
-      <Header as='h2' icon='file text outline' content='Recipes' />
-    </Segment>
-
+  <LayoutContent icon='file text outline' title='Recipes'>
     <Item.Group>
       {recipes.map(({ recipe, pinned }) => (
         <Item key={recipe.name}>
@@ -40,8 +36,7 @@ const RecipeList = ({ recipes, onRecipeClick, onRecipePin, onRecipeUnpin, onReci
         </Item>
       ))}
     </Item.Group>
-
-  </div>
+  </LayoutContent>
 );
 
 RecipeList.propTypes = {

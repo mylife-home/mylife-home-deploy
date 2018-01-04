@@ -5,8 +5,19 @@ import PropTypes             from 'prop-types';
 import { Menu, Icon }        from 'semantic-ui-react';
 import { runStatusIconName } from './tools';
 
+const styles = {
+  root : {
+    position  : 'fixed',
+    top       : 0,
+    bottom    : 0,
+    left      : 0,
+    right     : 0,
+    overflowY : 'auto'
+  }
+};
+
 const AppMenu = ({ recipes, runs, onRecipeListClick, onRecipeClick, onRunListClick, onRunClick, onFileListClick }) => (
-  <Menu icon='labeled' size='small' vertical fluid fixed='left'>
+  <Menu icon='labeled' size='small' vertical fluid fixed='left' style={styles.root}>
     <Menu.Item>
       <Menu.Menu>
 

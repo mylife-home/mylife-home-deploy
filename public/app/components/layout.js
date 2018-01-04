@@ -11,6 +11,14 @@ import RunList    from '../containers/run-list-container';
 import Run        from '../containers/run-container';
 import FileList   from '../containers/file-list-container';
 
+const styles = {
+  root : {
+    display       : 'flex',
+    flexDirection : 'column',
+    minHeight     : '100vh'
+  }
+};
+
 class Layout extends React.Component {
 
   constructor(props) {
@@ -71,7 +79,7 @@ class Layout extends React.Component {
 
   render() {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div style={styles.root}>
         <Segment fixed='top' textAlign='center' as='header' style={{ margin: 0 }}>
           <Header as='h1' image={<Image size='small' src='/images/favicon.ico' />} content='Mylife Home Deploy' />
         </Segment>

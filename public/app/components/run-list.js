@@ -1,17 +1,13 @@
 'use strict';
 
-import React                           from 'react';
-import PropTypes                       from 'prop-types';
-import { Segment, Header, Item, Icon } from 'semantic-ui-react';
-import { runStatusIconName }           from './tools';
+import React                 from 'react';
+import PropTypes             from 'prop-types';
+import { Item, Icon }        from 'semantic-ui-react';
+import { runStatusIconName } from './tools';
+import LayoutContent         from './layout-content';
 
 const RunList = ({ runs, onRunClick }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-
-    <Segment fixed='top' basic>
-      <Header as='h2' icon='tasks' content='Runs' />
-    </Segment>
-
+  <LayoutContent icon='tasks' title='Runs'>
     <Item.Group>
       {runs.map(run => (
         <Item key={run.id}>
@@ -31,8 +27,7 @@ const RunList = ({ runs, onRunClick }) => (
         </Item>
       ))}
     </Item.Group>
-
-  </div>
+  </LayoutContent>
 );
 
 RunList.propTypes = {
