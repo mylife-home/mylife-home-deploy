@@ -13,7 +13,6 @@ const Run = ({ run }) => (
     </Segment>
 
     <Segment basic>
-
       <Item.Group divided>
 
         <Item key={run.id}>

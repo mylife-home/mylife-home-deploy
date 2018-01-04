@@ -30,7 +30,7 @@ const RecipeList = ({ recipes, onRecipeClick, onRecipePin, onRecipeUnpin, onReci
                 } />
                 <Popup content='Delete recipe' trigger={
                   <Button basic icon='trash outline' onClick={() => confirm({ content : `Do you want to delete recipe '${recipe.name}' ?`, proceed : () => onRecipeDelete(recipe.name) })} />
-                } />  {/* TODO: confirm */}
+                } />
               </Button.Group>
             </Item.Header>
             <Item.Description>
