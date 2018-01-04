@@ -5,7 +5,7 @@ import PropTypes                                 from 'prop-types';
 import { Segment, Header, Table, Button, Popup } from 'semantic-ui-react';
 import confirm                                   from './confirm-dialog';
 
-const FileList = ({ files, onFileDelete }) => (
+const FileList = ({ files, onFileDownload, onFileDelete }) => (
   <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
 
     <Segment fixed='top' basic>
@@ -31,7 +31,7 @@ const FileList = ({ files, onFileDelete }) => (
               <Table.Cell>
                 <Button.Group basic style={{ marginLeft : '10px' }}>
                   <Popup content='Download file' trigger={
-                    <Button basic icon='download' onClick={() => { throw new Error('TODO Download file'); } } />
+                    <Button basic icon='download' onClick={() => onFileDownload(file.name) } />
                   } />
                   <Popup content='Delete file' trigger={
                     <Button basic icon='trash outline' onClick={() => confirm({ content : `Do you want to delete file '${file.name}' ?`, proceed : () => onFileDelete(file.name) })} />
@@ -48,8 +48,9 @@ const FileList = ({ files, onFileDelete }) => (
 );
 
 FileList.propTypes = {
-  files        : PropTypes.object.isRequired,
-  onFileDelete : PropTypes.func.isRequired,
+  files          : PropTypes.object.isRequired,
+  onFileDownload : PropTypes.func.isRequired,
+  onFileDelete   : PropTypes.func.isRequired,
 };
 
 export default FileList;
