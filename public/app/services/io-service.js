@@ -33,6 +33,8 @@ registerEventToAction('run:end',     ioRunSet);
 registerEventToAction('run:deleted', ioRunDeleted);
 registerEventToAction('run:log',     ioRunLog);
 
+registerActionToEvent(actionTypes.FILE_DELETE, 'file:delete');
+
 registerEventToAction('file:created', ioFileSet);
 registerEventToAction('file:deleted', ioFileDeleted);
 

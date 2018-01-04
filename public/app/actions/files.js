@@ -5,3 +5,5 @@ import { actionTypes }  from '../constants';
 
 export const ioFileSet      = createAction(actionTypes.FILE_SET);
 export const ioFileDeleted  = createAction(actionTypes.FILE_DELETED);
+
+export const deleteFile     = createAction(actionTypes.FILE_DELETE);
