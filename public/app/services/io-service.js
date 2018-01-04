@@ -1,11 +1,12 @@
 'use strict';
 
-import io from 'socket.io-client';
-import { actionTypes } from '../constants';
-import { ioOnlineSet } from '../actions/online';
-import { ioTaskSet } from '../actions/tasks';
+import io                                                                 from 'socket.io-client';
+import { actionTypes }                                                    from '../constants';
+import { ioOnlineSet }                                                    from '../actions/online';
+import { ioTaskSet }                                                      from '../actions/tasks';
 import { ioRecipeSet, ioRecipeDeleted, ioRecipePinned, ioRecipeUnpinned } from '../actions/recipes';
-import { ioRunSet, ioRunLog, ioRunDeleted } from '../actions/runs';
+import { ioRunSet, ioRunLog, ioRunDeleted }                               from '../actions/runs';
+import { ioFileSet, ioFileDeleted }                                       from '../actions/files';
 
 const eventToActionMap = {};
 const actionToEventMap = {};
@@ -31,6 +32,9 @@ registerEventToAction('run:begin',   ioRunSet);
 registerEventToAction('run:end',     ioRunSet);
 registerEventToAction('run:deleted', ioRunDeleted);
 registerEventToAction('run:log',     ioRunLog);
+
+registerEventToAction('file:created', ioFileSet);
+registerEventToAction('file:deleted', ioFileDeleted);
 
 // ---
 

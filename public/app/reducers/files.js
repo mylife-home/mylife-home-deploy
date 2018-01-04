@@ -14,30 +14,18 @@ export default handleActions({
     }
   },
 
-/*
-  [actionTypes.RUN_SET] : {
+  [actionTypes.FILE_SET] : {
     next : (state, action) => {
-      const run = action.payload;
-      // keep logs
-      return state.update(run.id, oldRun => ({
-        logs : oldRun && oldRun.logs || Immutable.List(),
-        ...run
-      }));
+      const file = action.payload;
+      return state.set(file.name, file);
     }
   },
 
-  [actionTypes.RUN_DELETED] : {
+  [actionTypes.FILE_DELETED] : {
     next : (state, action) => {
-      const { id } = action.payload;
-      return state.delete(id);
+      const { name } = action.payload;
+      return state.delete(name);
     }
   },
 
-  [actionTypes.RUN_LOG] : {
-    next : (state, action) => {
-      const { id, log } = action.payload;
-      return state.update(id, run => ({ ...run, logs : run.logs.push(log) }));
-    }
-  },
-*/
 }, Immutable.Map());

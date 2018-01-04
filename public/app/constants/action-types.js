@@ -27,5 +27,8 @@ export default wrap({
   RUN_SET         : null,
   RUN_LOG         : null,
   RUN_DELETED     : null,
+
+  FILE_SET        : null,
+  FILE_DELETED    : null,
 });
 
