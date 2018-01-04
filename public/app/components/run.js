@@ -2,9 +2,9 @@
 
 import React                               from 'react';
 import PropTypes                           from 'prop-types';
-import { Segment, Header, Item, Table }    from 'semantic-ui-react';
+import { Item, Table }                     from 'semantic-ui-react';
 import { runStatusIconName, formatString } from './tools';
-import LayoutContent            from './layout-content';
+import LayoutContent                       from './layout-content';
 
 const Run = ({ run }) => (
   <LayoutContent icon={runStatusIconName(run)} title={`Run #${run.id} - ${run.recipe}`}>
