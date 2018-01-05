@@ -6,7 +6,8 @@ import { Item, Table }                     from 'semantic-ui-react';
 import { runStatusIconName, formatString } from './tools';
 import LayoutContent                       from './layout-content';
 
-const formatDate = d => new Date(d).toLocaleString();
+const formatDate  = d => new Date(d).toLocaleString();
+const formatStack = s => formatString(s.replace(/ {4}/g, '\t'));
 
 const Run = ({ run }) => (
   <LayoutContent icon={runStatusIconName(run)} title={`Run #${run.id} - ${run.recipe}`}>
@@ -42,10 +43,10 @@ const Run = ({ run }) => (
         <Item>
           <Item.Content>
             <Item.Header>
-              Error : {run.err.message.replace(/\n/g, '')}
+              Error : {run.err.message}
             </Item.Header>
             <Item.Description>
-              {formatString(run.err.stack.replace(/ {4}/g, '\t'))}
+              {formatStack(run.err.stack)}
             </Item.Description>
           </Item.Content>
         </Item>
