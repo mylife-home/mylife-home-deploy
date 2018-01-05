@@ -26,3 +26,5 @@ export const copyRecipe = ({ source, destination }) => (dispatch, getState) => {
 };
 
 export const newRecipe = ({ name }) => createRecipe({ name, description : '', steps : [] });
+
+export const updateRecipe = createRecipe;

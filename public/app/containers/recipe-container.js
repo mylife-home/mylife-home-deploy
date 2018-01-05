@@ -2,9 +2,9 @@
 
 import { connect } from 'react-redux';
 
-import Recipe                                                            from '../components/recipe';
-import { getRecipe, getRecipePinned }                                    from '../selectors/recipes';
-import { pinRecipe, unpinRecipe, startRecipe, deleteRecipe, copyRecipe } from '../actions/recipes';
+import Recipe                                                                          from '../components/recipe';
+import { getRecipe, getRecipePinned }                                                  from '../selectors/recipes';
+import { pinRecipe, unpinRecipe, startRecipe, deleteRecipe, copyRecipe, updateRecipe } from '../actions/recipes';
 
 const mapStateToProps = (state, { recipe }) => ({
   recipe : getRecipe(state, recipe),
@@ -16,7 +16,8 @@ const mapDispatchToProps = dispatch => ({
   onRecipeUnpin  :  recipe           => dispatch(unpinRecipe({ name : recipe })),
   onRecipeStart  :  recipe           => dispatch(startRecipe({ name : recipe })),
   onRecipeDelete :  recipe           => dispatch(deleteRecipe({ name : recipe })),
-  onRecipeCopy   : (recipe, newName) => dispatch(copyRecipe({ source : recipe, destination : newName }))
+  onRecipeCopy   : (recipe, newName) => dispatch(copyRecipe({ source : recipe, destination : newName })),
+  onRecipeUpdate :  recipe           => dispatch(updateRecipe(recipe)),
 });
 
 const RecipeContainer = connect(

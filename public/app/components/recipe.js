@@ -6,8 +6,9 @@ import { Button, Popup, Icon, Item } from 'semantic-ui-react';
 import LayoutContent                 from './layout-content';
 import confirm                       from './confirm-dialog';
 import input                         from './input-dialog';
+import update                        from './recipe-update';
 
-const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart, onRecipeDelete, onRecipeCopy }) => (
+const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart, onRecipeDelete, onRecipeCopy, onRecipeUpdate }) => (
   <LayoutContent icon='file text outline' title={`Recipe ${recipe.name}`}>
     <div>
       <Button.Group basic>
@@ -21,7 +22,7 @@ const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart,
           <Button basic icon='copy' onClick={() => input({ title : 'Enter new recipe name', proceed : value => onRecipeCopy(recipe.name, value) })} />
         } />
         <Popup content='Update recipe' trigger={
-          <Button basic icon='write' onClick={() => console.log('TODO')} />
+          <Button basic icon='write' onClick={() => update({ recipe, proceed : value => onRecipeUpdate(value) })} />
         } />
         <Popup content='Delete recipe' trigger={
           <Button basic icon='trash outline' onClick={() => confirm({ content : `Do you want to delete recipe '${recipe.name}' ?`, proceed : () => onRecipeDelete(recipe.name) })} />
@@ -60,6 +61,7 @@ RecipeList.propTypes = {
   onRecipeStart  : PropTypes.func.isRequired,
   onRecipeDelete : PropTypes.func.isRequired,
   onRecipeCopy   : PropTypes.func.isRequired,
+  onRecipeUpdate : PropTypes.func.isRequired,
 };
 
 export default RecipeList;
