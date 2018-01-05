@@ -1,8 +1,8 @@
 'use strict';
 
-import React                               from 'react';
-import PropTypes                           from 'prop-types';
-import { Sidebar, Segment, Header, Image } from 'semantic-ui-react';
+import React                      from 'react';
+import PropTypes                  from 'prop-types';
+import { Segment, Header, Image } from 'semantic-ui-react';
 
 import Menu       from '../containers/menu-container';
 import RecipeList from '../containers/recipe-list-container';
@@ -23,6 +23,14 @@ const styles = {
     bottom   : 0,
     left     : 0,
     right    : 0
+  },
+  menuContainer : {
+    width    : 350,
+    position : 'relative'
+  },
+  contentContainer : {
+    flex     : 1,
+    position : 'relative'
   }
 };
 
@@ -91,8 +99,8 @@ class Layout extends React.Component {
           <Header as='h1' image={<Image size='small' src='/images/favicon.ico' />} content='Mylife Home Deploy' />
         </Segment>
 
-        <Sidebar.Pushable as={Segment} style={{ flex: 1, margin: 0 }}>
-          <Sidebar animation='push' width='wide' visible>
+        <div style={{ flex : 1, display : 'flex', flexDirection : 'row' }}>
+          <div fixed='left' style={styles.menuContainer}>
             <Menu
               onRecipeListClick = {this.onRecipeListClick}
               onRecipeClick     = {this.onRecipeClick    }
@@ -100,11 +108,11 @@ class Layout extends React.Component {
               onRunClick        = {this.onRunClick       }
               onFileListClick   = {this.onFileListClick  }
             />
-          </Sidebar>
-          <Sidebar.Pusher style={styles.fixed}>
+          </div>
+          <div style={styles.contentContainer}>
             {this.renderContent()}
-          </Sidebar.Pusher>
-        </Sidebar.Pushable>
+          </div>
+        </div>
       </div>
     );
   }
