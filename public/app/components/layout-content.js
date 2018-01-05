@@ -28,11 +28,11 @@ const FileList = ({ icon, title, children }) => (
       <Header as='h2' icon={icon} content={title} />
     </Segment>
 
-    <div style={styles.container}>
+    <Segment style={styles.container}>
       <Segment basic>
         {children}
       </Segment>
-    </div>
+    </Segment>
 
   </div>
 );
