@@ -25,6 +25,7 @@ const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart,
         } />
       </Button.Group>
       <Item.Group divided>
+
         <Item>
           <Item.Content>
             <Item.Header>
@@ -32,6 +33,17 @@ const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart,
             </Item.Header>
           </Item.Content>
         </Item>
+
+        {recipe.steps.map((step, index) => (
+          <Item key={index}>
+            <Item.Content>
+              <Item.Header>
+                Step
+              </Item.Header>
+            </Item.Content>
+          </Item>
+        ))}
+
       </Item.Group>
     </div>
   </LayoutContent>
