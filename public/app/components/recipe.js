@@ -20,6 +20,9 @@ const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart,
         <Popup content='Copy recipe' trigger={
           <Button basic icon='copy' onClick={() => input({ title : 'Enter new recipe name', proceed : value => onRecipeCopy(recipe.name, value) })} />
         } />
+        <Popup content='Update recipe' trigger={
+          <Button basic icon='write' onClick={() => console.log('TODO')} />
+        } />
         <Popup content='Delete recipe' trigger={
           <Button basic icon='trash outline' onClick={() => confirm({ content : `Do you want to delete recipe '${recipe.name}' ?`, proceed : () => onRecipeDelete(recipe.name) })} />
         } />
