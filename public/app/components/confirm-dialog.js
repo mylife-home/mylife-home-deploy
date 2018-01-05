@@ -5,11 +5,10 @@ import { confirmable, createConfirmation } from 'react-confirm';
 
 const ConfirmDialog = ({ show, proceed, /*dismiss,*/ cancel, /*confirmation,*/ options }) => (
   <Confirm
-    open={show}
-    header={options.title}
-    content={options.content}
-    onConfirm={() => proceed()}
-    onCancel={() => cancel()} />
+    open      = {show}
+    content   = {options.content}
+    onConfirm = {() => proceed()}
+    onCancel  = {() => cancel()} />
 );
 
 ConfirmDialog.propTypes = {
