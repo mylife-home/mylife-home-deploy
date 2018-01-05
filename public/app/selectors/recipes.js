@@ -17,3 +17,5 @@ export const getRecipesWithPin = state => state.recipes.all
 export const getRecipeNames = state => state.recipes.all.keySeq();
 
 export const getRecipe = (state, value) => state.recipes.all.get(value);
+
+export const getRecipePinned = (state, value) => state.recipes.pinned.has(value);
