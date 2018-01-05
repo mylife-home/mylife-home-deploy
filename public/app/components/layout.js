@@ -84,7 +84,6 @@ class Layout extends React.Component {
       case 'run':
         return (<Run run={value}/>);
 
-
       case 'file-list':
         return (<FileList />);
     }
