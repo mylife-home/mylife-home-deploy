@@ -2,14 +2,14 @@
 
 import React                               from 'react';
 import PropTypes                           from 'prop-types';
-import { Item, Table }                     from 'semantic-ui-react';
+import { Item, Table, Popup, Button }      from 'semantic-ui-react';
 import { runStatusIconName, formatString } from './tools';
 import LayoutContent                       from './layout-content';
 
 const formatDate  = d => new Date(d).toLocaleString();
 const formatStack = s => formatString(s.replace(/ {4}/g, '\t'));
 
-const Run = ({ run }) => (
+const Run = ({ run, onRunDownloadLogs }) => (
   <LayoutContent icon={runStatusIconName(run)} title={`Run #${run.id} - ${run.recipe}`}>
     <Item.Group divided>
 
@@ -79,6 +79,16 @@ const Run = ({ run }) => (
                   </Table.Row>
                 ))}
               </Table.Body>
+
+              <Table.Footer>
+                <Table.Row>
+                  <Table.HeaderCell colSpan='4'>
+                    <Popup content='Download logs' trigger={
+                      <Button basic icon='download' onClick={() => onRunDownloadLogs(run.id) } />
+                    } />
+                  </Table.HeaderCell>
+                </Table.Row>
+              </Table.Footer>
             </Table>
           </Item.Description>
         </Item.Content>
@@ -89,7 +99,8 @@ const Run = ({ run }) => (
 );
 
 Run.propTypes = {
-  run : PropTypes.object.isRequired,
+  run               : PropTypes.object.isRequired,
+  onRunDownloadLogs : PropTypes.func.isRequired,
 };
 
 export default Run;
