@@ -53,7 +53,7 @@ class Layout extends React.Component {
       case 'recipe': {
         const nextRecipes = nextProps.recipes;
         if(this.props.recipes === nextRecipes) { return; }
-        if(!nextRecipes.has(this.state.value)) { return; }
+        if(nextRecipes.has(this.state.value)) { return; }
         this.setState({ type: null, value: null });
         return;
       }
