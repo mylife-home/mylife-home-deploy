@@ -6,6 +6,8 @@ import { Item, Table }                     from 'semantic-ui-react';
 import { runStatusIconName, formatString } from './tools';
 import LayoutContent                       from './layout-content';
 
+const formatDate = d => new Date(d).toLocaleString();
+
 const Run = ({ run }) => (
   <LayoutContent icon={runStatusIconName(run)} title={`Run #${run.id} - ${run.recipe}`}>
     <Item.Group divided>
@@ -13,7 +15,25 @@ const Run = ({ run }) => (
       <Item key={run.id}>
         <Item.Content>
           <Item.Header>
-            Status : {run.status}
+            <Table basic='very' celled collapsing>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Status</Table.Cell>
+                  <Table.Cell>{run.status}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Creation</Table.Cell>
+                  <Table.Cell>{formatDate(run.creation)}</Table.Cell>
+                </Table.Row>
+                {run.end && (
+                  <Table.Row>
+                    <Table.Cell>End</Table.Cell>
+                    <Table.Cell>{formatDate(run.end)}</Table.Cell>
+                  </Table.Row>
+                )}
+              </Table.Body>
+            </Table>
+
           </Item.Header>
         </Item.Content>
       </Item>
@@ -41,6 +61,7 @@ const Run = ({ run }) => (
 
               <Table.Header>
                 <Table.Row>
+                  <Table.HeaderCell width={1}>Timestamp</Table.HeaderCell>
                   <Table.HeaderCell width={1}>Category</Table.HeaderCell>
                   <Table.HeaderCell width={1}>Severity</Table.HeaderCell>
                   <Table.HeaderCell width={5}>Message</Table.HeaderCell>
@@ -50,6 +71,7 @@ const Run = ({ run }) => (
               <Table.Body>
                 {run.logs.map((log, index) => (
                   <Table.Row key={index} error={log.category === 'error'} warning={log.category==='warning'}>
+                    <Table.Cell>{formatDate(log.date)}</Table.Cell>
                     <Table.Cell>{log.category}</Table.Cell>
                     <Table.Cell>{log.severity}</Table.Cell>
                     <Table.Cell>{log.message}</Table.Cell>
