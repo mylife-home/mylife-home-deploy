@@ -24,18 +24,12 @@ const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart,
           <Button basic icon='trash outline' onClick={() => confirm({ content : `Do you want to delete recipe '${recipe.name}' ?`, proceed : () => onRecipeDelete(recipe.name) })} />
         } />
       </Button.Group>
-      <Item.Group>
+      <Item.Group divided>
         <Item>
-          <Item.Image size='tiny'>
-            <Icon name='file text outline' size='huge' />
-          </Item.Image>
           <Item.Content>
             <Item.Header>
-              Header
+              {recipe.description}
             </Item.Header>
-            <Item.Description>
-              Description
-            </Item.Description>
           </Item.Content>
         </Item>
       </Item.Group>
