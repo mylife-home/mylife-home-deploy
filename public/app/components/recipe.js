@@ -1,26 +1,51 @@
 'use strict';
 
-import React          from 'react';
-import PropTypes      from 'prop-types';
-import { Button }     from 'semantic-ui-react';
-import LayoutContent  from './layout-content';
-import confirm        from './confirm-dialog';
-import input          from './input-dialog';
+import React                         from 'react';
+import PropTypes                     from 'prop-types';
+import { Button, Popup, Icon, Item } from 'semantic-ui-react';
+import LayoutContent                 from './layout-content';
+import confirm                       from './confirm-dialog';
+import input                         from './input-dialog';
 
-const RecipeList = ({ recipe, onRecipePin, onRecipeUnpin, onRecipeStart, onRecipeDelete, onRecipeCopy }) => (
+const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart, onRecipeDelete, onRecipeCopy }) => (
   <LayoutContent icon='file text outline' title={`Recipe ${recipe.name}`}>
     <div>
-      <Button content='pin'    onClick={() => onRecipePin(recipe.name)} />
-      <Button content='unpin'  onClick={() => onRecipeUnpin(recipe.name)} />
-      <Button content='start'  onClick={() => onRecipeStart(recipe.name)} />
-      <Button content='delete' onClick={() => confirm({ content : `Do you want to delete recipe '${recipe.name}' ?`, proceed : () => onRecipeDelete(recipe.name) })} />
-      <Button content='copy'   onClick={() => input({ title : 'Enter new recipe name', proceed : value => onRecipeCopy(recipe.name, value) })} />
+      <Button.Group basic>
+        <Popup content={`${pinned ? 'Unpin' : 'Pin'} recipe`} trigger={
+          <Button basic icon={<Icon name='pin' rotated={pinned ? 'clockwise' : null} />} onClick={() => (pinned ? onRecipeUnpin : onRecipePin)(recipe.name)} />
+        } />
+        <Popup content='Start recipe' trigger={
+          <Button basic icon='play' onClick={() => onRecipeStart(recipe.name)} />
+        } />
+        <Popup content='Copy recipe' trigger={
+          <Button basic icon='copy' onClick={() => input({ title : 'Enter new recipe name', proceed : value => onRecipeCopy(recipe.name, value) })} />
+        } />
+        <Popup content='Delete recipe' trigger={
+          <Button basic icon='trash outline' onClick={() => confirm({ content : `Do you want to delete recipe '${recipe.name}' ?`, proceed : () => onRecipeDelete(recipe.name) })} />
+        } />
+      </Button.Group>
+      <Item.Group>
+        <Item>
+          <Item.Image size='tiny'>
+            <Icon name='file text outline' size='huge' />
+          </Item.Image>
+          <Item.Content>
+            <Item.Header>
+              Header
+            </Item.Header>
+            <Item.Description>
+              Description
+            </Item.Description>
+          </Item.Content>
+        </Item>
+      </Item.Group>
     </div>
   </LayoutContent>
 );
 
 RecipeList.propTypes = {
   recipe         : PropTypes.object.isRequired,
+  pinned         : PropTypes.bool.isRequired,
   onRecipePin    : PropTypes.func.isRequired,
   onRecipeUnpin  : PropTypes.func.isRequired,
   onRecipeStart  : PropTypes.func.isRequired,
