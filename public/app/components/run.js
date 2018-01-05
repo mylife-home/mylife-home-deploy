@@ -38,7 +38,7 @@ const Run = ({ run }) => (
         </Item.Content>
       </Item>
 
-      { run.err && (
+      {run.err && (
         <Item>
           <Item.Content>
             <Item.Header>
