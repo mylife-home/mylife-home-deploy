@@ -107,8 +107,12 @@ class RecipeUpdateDialog extends React.Component {
               <Item.Content>
                 <Item.Header>
                   Description
-                  <Input style={{ marginLeft : '1em' }} onChange={e => this.setState({ description : e.target.value })} value={description} />
                 </Item.Header>
+                <Input
+                  fluid
+                  style={{ marginLeft : '1em' }}
+                  onChange={e => this.setState({ description : e.target.value })}
+                  value={description} />
               </Item.Content>
             </Item>
 
