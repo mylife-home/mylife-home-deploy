@@ -3,12 +3,15 @@
 import { connect } from 'react-redux';
 
 import Recipe                                                                          from '../components/recipe';
-import { getRecipe, getRecipePinned }                                                  from '../selectors/recipes';
+import { getRecipe, getRecipePinned, getRecipeNames }                                  from '../selectors/recipes';
 import { pinRecipe, unpinRecipe, startRecipe, deleteRecipe, copyRecipe, updateRecipe } from '../actions/recipes';
+import { getTasks }                                                                    from '../selectors/tasks';
 
 const mapStateToProps = (state, { recipe }) => ({
-  recipe : getRecipe(state, recipe),
-  pinned : getRecipePinned(state, recipe)
+  recipe      : getRecipe(state, recipe),
+  pinned      : getRecipePinned(state, recipe),
+  recipeNames : getRecipeNames(state),
+  tasks       : getTasks(state),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -8,7 +8,7 @@ import confirm                       from './confirm-dialog';
 import input                         from './input-dialog';
 import update                        from './recipe-update';
 
-const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart, onRecipeDelete, onRecipeCopy, onRecipeUpdate }) => (
+const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart, onRecipeDelete, onRecipeCopy, onRecipeUpdate, recipeNames, tasks }) => (
   <LayoutContent icon='file text outline' title={`Recipe ${recipe.name}`}>
     <div>
       <Button.Group basic>
@@ -22,7 +22,7 @@ const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart,
           <Button basic icon='copy' onClick={() => input({ title : 'Enter new recipe name', proceed : value => onRecipeCopy(recipe.name, value) })} />
         } />
         <Popup content='Update recipe' trigger={
-          <Button basic icon='write' onClick={() => update({ recipe, proceed : value => onRecipeUpdate(value) })} />
+          <Button basic icon='write' onClick={() => update({ recipe, recipeNames, tasks, proceed : value => onRecipeUpdate(value) })} />
         } />
         <Popup content='Delete recipe' trigger={
           <Button basic icon='trash outline' onClick={() => confirm({ content : `Do you want to delete recipe '${recipe.name}' ?`, proceed : () => onRecipeDelete(recipe.name) })} />
@@ -56,6 +56,8 @@ const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart,
 RecipeList.propTypes = {
   recipe         : PropTypes.object.isRequired,
   pinned         : PropTypes.bool.isRequired,
+  recipeNames    : PropTypes.object.isRequired,
+  tasks          : PropTypes.object.isRequired,
   onRecipePin    : PropTypes.func.isRequired,
   onRecipeUnpin  : PropTypes.func.isRequired,
   onRecipeStart  : PropTypes.func.isRequired,
