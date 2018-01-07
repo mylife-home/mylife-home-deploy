@@ -1,7 +1,7 @@
-import React                                                   from 'react';
-import PropTypes                                               from 'prop-types';
-import { Modal, Input, Header, Button, Popup, Item, Dropdown } from 'semantic-ui-react';
-import { confirmable, createConfirmation }                     from 'react-confirm';
+import React                                                          from 'react';
+import PropTypes                                                      from 'prop-types';
+import { Modal, Input, Header, Button, Popup, Item, Dropdown, Table } from 'semantic-ui-react';
+import { confirmable, createConfirmation }                            from 'react-confirm';
 
 function swap(arr, index1, index2) {
   const res   = arr.slice();
@@ -98,9 +98,9 @@ class RecipeUpdateDialog extends React.Component {
     const { recipeNames, tasks }       = options;
 
     return (
-      <Modal open={show} onClose={() => cancel()} closeOnEscape={false} closeOnRootNodeClick={false}>
+      <Modal open={show} onClose={() => cancel()} closeOnEscape={false} closeOnRootNodeClick={false} size='fullscreen'>
         <Header icon='write' content={`Update recipe '${name}'`} />
-        <Modal.Content>
+        <Modal.Content scrolling>
           <Item.Group divided>
 
             <Item>
@@ -121,52 +121,83 @@ class RecipeUpdateDialog extends React.Component {
             </Item>
 
             {steps.map((step, index) => {
-              const taskMeta = step.task && tasks.find(t => t.name === step.name);
+              const taskMeta = (step.type === 'task') && tasks.find(t => t.name === step.name);
               return (
                 <Item key={step.id}>
                   <Item.Content>
-                    <Button.Group basic>
-                      <Popup content='Delete step' trigger={
-                        <Button basic icon='trash outline' onClick={() => this.stepRemove(index)} />
-                      } />
-                      <Popup content='Move up' trigger={
-                        <Button disabled={index === 0} basic icon='arrow circle outline up' onClick={() => this.stepSwap(index, index-1)} />
-                      } />
-                      <Popup content='Move down' trigger={
-                        <Button disabled={index === steps.length - 1} basic icon='arrow circle outline down' onClick={() => this.stepSwap(index, index+1)} />
-                      } />
-                    </Button.Group>
-                    <Dropdown fluid selection onChange={(e, { value }) => this.stepChangeType(index, value)} value={step.type} options={[
-                      { key : 'recipe', text : 'Recipe', value : 'recipe', icon : 'file text outline' },
-                      { key : 'task',   text : 'Task',   value : 'task',   icon : 'settings' }
-                    ]} />
-                    {step.type === 'recipe' && (
-                      <div>
-                        <Input list='recipes' onChange={e => this.stepChangeProp(index, { name : e.target.value })} value={step.name || ''} />
-                        <datalist id='recipes'>
-                          {recipeNames.map(name => (<option key={name} value={name} />))}
-                        </datalist>
-                      </div>
-                    )}
-                    {step.type === 'task' && (
-                      <Dropdown
-                        fluid
-                        selection
-                        onChange = {(e, { value }) => this.stepChangeProp(index, { name : value, parameters : {}})}
-                        value    = {step.name}
-                        options  = {Array.from(tasks.map(task => ({ key : task.name, text : task.name, value : task.name })))} />
-                    )}
-                    {taskMeta && taskMeta.description}
-                    {taskMeta && taskMeta.parameters && taskMeta.parameters.map(paramMeta => (
-                      <div key={paramMeta.name}>
-                        {paramMeta.name}
-                        <Input
-                          style={{ marginLeft : '1em', marginRigt : '1em' }}
-                          onChange={e => this.stepChangeParameter(index, paramMeta.name, e.target.value)}
-                          value={step.parameters[paramMeta.name] || ''} />
-                        {paramMeta.description}
-                      </div>
-                    ))}
+
+                    <Table basic='very' celled>
+                      <Table.Body>
+
+                        <Table.Row>
+                          <Table.Cell colSpan='3'>
+                            <Button.Group basic>
+                              <Popup content='Delete step' trigger={
+                                <Button basic icon='trash outline' onClick={() => this.stepRemove(index)} />
+                              } />
+                              <Popup content='Move up' trigger={
+                                <Button disabled={index === 0} basic icon='arrow circle outline up' onClick={() => this.stepSwap(index, index-1)} />
+                              } />
+                              <Popup content='Move down' trigger={
+                                <Button disabled={index === steps.length - 1} basic icon='arrow circle outline down' onClick={() => this.stepSwap(index, index+1)} />
+                              } />
+                            </Button.Group>
+                          </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
+                          <Table.Cell width={1}>
+                            <Dropdown fluid selection onChange={(e, { value }) => this.stepChangeType(index, value)} value={step.type} options={[
+                              { key : 'recipe', text : 'Recipe', value : 'recipe', icon : 'file text outline' },
+                              { key : 'task',   text : 'Task',   value : 'task',   icon : 'settings' }
+                            ]} />
+                          </Table.Cell>
+                          <Table.Cell width={1}>
+                            {step.type === 'recipe' && (
+                              <div>
+                                <Input
+                                  fluid
+                                  list='recipes'
+                                  onChange={e => this.stepChangeProp(index, { name : e.target.value })}
+                                  value={step.name || ''} />
+                                <datalist id='recipes'>
+                                  {recipeNames.map(name => (<option key={name} value={name} />))}
+                                </datalist>
+                              </div>
+                            )}
+                            {step.type === 'task' && (
+                              <Dropdown
+                                fluid
+                                selection
+                                onChange = {(e, { value }) => this.stepChangeProp(index, { name : value, parameters : {}})}
+                                value    = {step.name}
+                                options  = {Array.from(tasks.map(task => ({ key : task.name, text : task.name, value : task.name })))} />
+                            )}
+                          </Table.Cell>
+                          <Table.Cell width={2}>
+                            {taskMeta && taskMeta.description}
+                          </Table.Cell>
+                        </Table.Row>
+
+                        {taskMeta && taskMeta.parameters && taskMeta.parameters.map(paramMeta => (
+                          <Table.Row key={paramMeta.name}>
+                            <Table.Cell width={1}>
+                              {paramMeta.name}
+                            </Table.Cell>
+                            <Table.Cell width={1}>
+                              <Input
+                                fluid
+                                onChange={e => this.stepChangeParameter(index, paramMeta.name, e.target.value)}
+                                value={step.parameters[paramMeta.name] || ''} />
+                            </Table.Cell>
+                            <Table.Cell width={2}>
+                              {paramMeta.description}
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table>
+
                   </Item.Content>
                 </Item>
               );
