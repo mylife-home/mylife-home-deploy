@@ -47,12 +47,9 @@ class RecipeUpdateDialog extends React.Component {
   }
 
   stepChangeType(index, type) {
-    const { id, name, parameters } = this.state.steps[index];
-
-    // only keep used properties
-    const step = type === 'recipe' ?
-      { id, type, name } :
-      { id, type, name, parameters };
+    const { id, type : oldType } = this.state.steps[index];
+    if(type === oldType) { return; }
+    const step = { id, type };
 
     this.setState({ steps : [
       ... this.state.steps.slice(0, index),
@@ -128,50 +125,48 @@ class RecipeUpdateDialog extends React.Component {
               return (
                 <Item key={step.id}>
                   <Item.Content>
-                    <Item.Header>
-                      <Button.Group basic>
-                        <Popup content='Delete step' trigger={
-                          <Button basic icon='trash outline' onClick={() => this.stepRemove(index)} />
-                        } />
-                        <Popup content='Move up' trigger={
-                          <Button disabled={index === 0} basic icon='arrow circle outline up' onClick={() => this.stepSwap(index, index-1)} />
-                        } />
-                        <Popup content='Move down' trigger={
-                          <Button disabled={index === steps.length - 1} basic icon='arrow circle outline down' onClick={() => this.stepSwap(index, index+1)} />
-                        } />
-                      </Button.Group>
-                      <Dropdown fluid selection onChange={(e, { value }) => this.stepChangeType(index, value)} value={step.type} options={[
-                        { key : 'recipe', text : 'Recipe', value : 'recipe', icon : 'file text outline' },
-                        { key : 'task',   text : 'Task',   value : 'task',   icon : 'settings' }
-                      ]} />
-                      {step.type === 'recipe' && (
-                        <div>
-                          <Input list='recipes' onChange={e => this.stepChangeProp(index, { name : e.target.value })} value={step.name || ''} />
-                          <datalist id='recipes'>
-                            {recipeNames.map(name => (<option key={name} value={name} />))}
-                          </datalist>
-                        </div>
-                      )}
-                      {step.type === 'task' && (
-                        <Dropdown
-                          fluid
-                          selection
-                          onChange = {(e, { value }) => this.stepChangeProp(index, { name : value, parameters : {}})}
-                          value    = {step.name}
-                          options  = {Array.from(tasks.map(task => ({ key : task.name, text : task.name, value : task.name })))} />
-                      )}
-                      {taskMeta && taskMeta.description}
-                      {taskMeta && taskMeta.parameters && taskMeta.parameters.map(paramMeta => (
-                        <div key={paramMeta.name}>
-                          {paramMeta.name}
-                          <Input
-                            style={{ marginLeft : '1em', marginRigt : '1em' }}
-                            onChange={e => this.stepChangeParameter(index, paramMeta.name, e.target.value)}
-                            value={step.parameters[paramMeta.name] || ''} />
-                          {paramMeta.description}
-                        </div>
-                      ))}
-                    </Item.Header>
+                    <Button.Group basic>
+                      <Popup content='Delete step' trigger={
+                        <Button basic icon='trash outline' onClick={() => this.stepRemove(index)} />
+                      } />
+                      <Popup content='Move up' trigger={
+                        <Button disabled={index === 0} basic icon='arrow circle outline up' onClick={() => this.stepSwap(index, index-1)} />
+                      } />
+                      <Popup content='Move down' trigger={
+                        <Button disabled={index === steps.length - 1} basic icon='arrow circle outline down' onClick={() => this.stepSwap(index, index+1)} />
+                      } />
+                    </Button.Group>
+                    <Dropdown fluid selection onChange={(e, { value }) => this.stepChangeType(index, value)} value={step.type} options={[
+                      { key : 'recipe', text : 'Recipe', value : 'recipe', icon : 'file text outline' },
+                      { key : 'task',   text : 'Task',   value : 'task',   icon : 'settings' }
+                    ]} />
+                    {step.type === 'recipe' && (
+                      <div>
+                        <Input list='recipes' onChange={e => this.stepChangeProp(index, { name : e.target.value })} value={step.name || ''} />
+                        <datalist id='recipes'>
+                          {recipeNames.map(name => (<option key={name} value={name} />))}
+                        </datalist>
+                      </div>
+                    )}
+                    {step.type === 'task' && (
+                      <Dropdown
+                        fluid
+                        selection
+                        onChange = {(e, { value }) => this.stepChangeProp(index, { name : value, parameters : {}})}
+                        value    = {step.name}
+                        options  = {Array.from(tasks.map(task => ({ key : task.name, text : task.name, value : task.name })))} />
+                    )}
+                    {taskMeta && taskMeta.description}
+                    {taskMeta && taskMeta.parameters && taskMeta.parameters.map(paramMeta => (
+                      <div key={paramMeta.name}>
+                        {paramMeta.name}
+                        <Input
+                          style={{ marginLeft : '1em', marginRigt : '1em' }}
+                          onChange={e => this.stepChangeParameter(index, paramMeta.name, e.target.value)}
+                          value={step.parameters[paramMeta.name] || ''} />
+                        {paramMeta.description}
+                      </div>
+                    ))}
                   </Item.Content>
                 </Item>
               );
