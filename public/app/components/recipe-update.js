@@ -47,12 +47,12 @@ class RecipeUpdateDialog extends React.Component {
   }
 
   stepChangeType(index, type) {
-    const { id, task, parameters, name } = this.state.steps[index];
+    const { id, name, parameters } = this.state.steps[index];
 
     // only keep used properties
     const step = type === 'recipe' ?
       { id, type, name } :
-      { id, type, task, parameters };
+      { id, type, name, parameters };
 
     this.setState({ steps : [
       ... this.state.steps.slice(0, index),
@@ -124,7 +124,7 @@ class RecipeUpdateDialog extends React.Component {
             </Item>
 
             {steps.map((step, index) => {
-              const taskMeta = step.task && tasks.find(t => t.name === step.task);
+              const taskMeta = step.task && tasks.find(t => t.name === step.name);
               return (
                 <Item key={step.id}>
                   <Item.Content>
@@ -156,8 +156,8 @@ class RecipeUpdateDialog extends React.Component {
                         <Dropdown
                           fluid
                           selection
-                          onChange = {(e, { value }) => this.stepChangeProp(index, { task : value, parameters : {}})}
-                          value    = {step.task}
+                          onChange = {(e, { value }) => this.stepChangeProp(index, { name : value, parameters : {}})}
+                          value    = {step.name}
                           options  = {Array.from(tasks.map(task => ({ key : task.name, text : task.name, value : task.name })))} />
                       )}
                       {taskMeta && taskMeta.description}
