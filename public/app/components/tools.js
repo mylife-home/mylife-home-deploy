@@ -30,3 +30,14 @@ export const runStatusIconName = run => {
         : 'checkmark'; // success
   }
 };
+
+// https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string
+export const formatSize = size => {
+  const i = size && Math.floor(Math.log(size) / Math.log(1024));
+  return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + [ 'B', 'kB', 'MB', 'GB', 'TB' ][i];
+};
+
+export const formatDate       = d => new Date(d).toLocaleString();
+export const formatStackTrace = s => formatString(s.replace(/ {4}/g, '\t'));
+
+export const makeFirstUpper = s => s.charAt(0).toUpperCase() + s.slice(1);

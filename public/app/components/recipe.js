@@ -7,8 +7,7 @@ import LayoutContent                        from './layout-content';
 import confirm                              from './confirm-dialog';
 import input                                from './input-dialog';
 import update                               from './recipe-update';
-
-const makeFirstUpper = s => s.charAt(0).toUpperCase() + s.slice(1);
+import { makeFirstUpper }                   from './tools';
 
 const RecipeList = ({ recipe, pinned, onRecipePin, onRecipeUnpin, onRecipeStart, onRecipeDelete, onRecipeCopy, onRecipeUpdate, recipeNames, tasks }) => (
   <LayoutContent icon='file text outline' title={`Recipe ${recipe.name}`}>

@@ -1,13 +1,10 @@
 'use strict';
 
-import React                               from 'react';
-import PropTypes                           from 'prop-types';
-import { Item, Table, Popup, Button }      from 'semantic-ui-react';
-import { runStatusIconName, formatString } from './tools';
-import LayoutContent                       from './layout-content';
-
-const formatDate  = d => new Date(d).toLocaleString();
-const formatStack = s => formatString(s.replace(/ {4}/g, '\t'));
+import React                                               from 'react';
+import PropTypes                                           from 'prop-types';
+import { Item, Table, Popup, Button }                      from 'semantic-ui-react';
+import { runStatusIconName, formatDate, formatStackTrace } from './tools';
+import LayoutContent                                       from './layout-content';
 
 const Run = ({ run, onRunDownloadLogs }) => (
   <LayoutContent icon={runStatusIconName(run)} title={`Run #${run.id} - ${run.recipe}`}>
@@ -46,7 +43,7 @@ const Run = ({ run, onRunDownloadLogs }) => (
               Error : {run.err.message}
             </Item.Header>
             <Item.Description>
-              {formatStack(run.err.stack)}
+              {formatStackTrace(run.err.stack)}
             </Item.Description>
           </Item.Content>
         </Item>

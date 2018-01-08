@@ -1,18 +1,11 @@
 'use strict';
 
-import React                    from 'react';
-import PropTypes                from 'prop-types';
-import { Table, Button, Popup } from 'semantic-ui-react';
-import LayoutContent            from './layout-content';
-import confirm                  from './confirm-dialog';
-
-const formatDate = d => new Date(d).toLocaleString();
-
-// https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string
-const formatSize = size => {
-  const i = size && Math.floor(Math.log(size) / Math.log(1024));
-  return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + [ 'B', 'kB', 'MB', 'GB', 'TB' ][i];
-};
+import React                      from 'react';
+import PropTypes                  from 'prop-types';
+import { Table, Button, Popup }   from 'semantic-ui-react';
+import LayoutContent              from './layout-content';
+import confirm                    from './confirm-dialog';
+import { formatDate, formatSize } from './tools';
 
 const FileList = ({ files, onFileUpload, onFileDownload, onFileDelete }) => (
   <LayoutContent icon='folder outline' title='Files'>
