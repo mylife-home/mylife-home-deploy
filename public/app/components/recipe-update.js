@@ -140,10 +140,16 @@ class RecipeUpdateDialog extends React.Component {
                                   <Button basic icon='trash outline' onClick={() => this.stepRemove(index)} />
                                 } />
                                 <Popup content='Move up' trigger={
-                                  <Button disabled={index === 0} basic icon='arrow circle outline up' onClick={() => this.stepSwap(index, index-1)} />
+                                  <Button disabled={index === 0} basic icon='chevron circle up' onClick={() => this.stepSwap(index, index-1)} />
                                 } />
                                 <Popup content='Move down' trigger={
-                                  <Button disabled={index === steps.length - 1} basic icon='arrow circle outline down' onClick={() => this.stepSwap(index, index+1)} />
+                                  <Button disabled={index === steps.length - 1} basic icon='chevron circle down' onClick={() => this.stepSwap(index, index+1)} />
+                                } />
+                                <Popup content='Move top' trigger={
+                                  <Button disabled={index === 0} basic icon='arrow circle outline up' onClick={() => this.stepSwap(index, 0)} />
+                                } />
+                                <Popup content='Move bottom' trigger={
+                                  <Button disabled={index === steps.length - 1} basic icon='arrow circle outline down' onClick={() => this.stepSwap(index, steps.length - 1)} />
                                 } />
                               </Button.Group>
                             </Table.Cell>
