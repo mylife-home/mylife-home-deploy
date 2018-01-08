@@ -125,6 +125,28 @@ describe('Tasks', () => {
     });
   });
 
+  describe('ImageCmdlineAdd', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext({ nocache : true });
+      await tasks.ImageCmdlineAdd.execute(context, { content: 'test-param1' });
+
+      expect(vfs.readText(context.root, [ 'cmdline.txt' ])).to.equal('modules=loop,squashfs,sd-mod,usb-storage quiet dwc_otg.lpm_enable=0 console=ttyAMA0,115200 console=tty1 test-param1\n');
+    });
+  });
+
+  describe('ImageCmdlineRemove', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext({ nocache : true });
+      await tasks.ImageCmdlineAdd.execute(context, { content: 'test-param1' });
+      await tasks.ImageCmdlineAdd.execute(context, { content: 'test-param2' });
+      await tasks.ImageCmdlineAdd.execute(context, { content: 'test-param3' });
+      await tasks.ImageCmdlineRemove.execute(context, { content: 'test-param1' });
+      await tasks.ImageCmdlineRemove.execute(context, { content: 'test-param3' });
+
+      expect(vfs.readText(context.root, [ 'cmdline.txt' ])).to.equal('modules=loop,squashfs,sd-mod,usb-storage quiet dwc_otg.lpm_enable=0 console=ttyAMA0,115200 console=tty1 test-param2\n');
+    });
+  });
+
   // ImageInstall
 
   describe('ImageExport', () => {
