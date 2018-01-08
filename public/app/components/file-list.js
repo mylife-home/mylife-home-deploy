@@ -6,14 +6,23 @@ import { Table, Button, Popup } from 'semantic-ui-react';
 import LayoutContent            from './layout-content';
 import confirm                  from './confirm-dialog';
 
+const formatDate = d => new Date(d).toLocaleString();
+
+// https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string
+const formatSize = size => {
+  const i = size && Math.floor(Math.log(size) / Math.log(1024));
+  return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + [ 'B', 'kB', 'MB', 'GB', 'TB' ][i];
+};
+
 const FileList = ({ files, onFileUpload, onFileDownload, onFileDelete }) => (
   <LayoutContent icon='folder outline' title='Files'>
-    <Table>
+    <Table celled>
 
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell width={1}>Name</Table.HeaderCell>
-          <Table.HeaderCell width={1}>Size</Table.HeaderCell>
+          <Table.HeaderCell width={4}>Name</Table.HeaderCell>
+          <Table.HeaderCell width={2}>Size</Table.HeaderCell>
+          <Table.HeaderCell width={2}>Modified Time</Table.HeaderCell>
           <Table.HeaderCell width={1}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
@@ -22,9 +31,10 @@ const FileList = ({ files, onFileUpload, onFileDownload, onFileDelete }) => (
         {files.map(file => (
           <Table.Row key={file.name}>
             <Table.Cell>{file.name}</Table.Cell>
-            <Table.Cell>{file.size}</Table.Cell>
+            <Table.Cell>{formatSize(file.size)}</Table.Cell>
+            <Table.Cell>{formatDate(file.mtime)}</Table.Cell>
             <Table.Cell>
-              <Button.Group basic style={{ marginLeft : '10px' }}>
+              <Button.Group basic>
                 <Popup content='Download file' trigger={
                   <Button basic icon='download' onClick={() => onFileDownload(file.name) } />
                 } />
@@ -39,7 +49,7 @@ const FileList = ({ files, onFileUpload, onFileDownload, onFileDelete }) => (
 
       <Table.Footer>
         <Table.Row>
-          <Table.HeaderCell colSpan='3'>
+          <Table.HeaderCell colSpan='4'>
             <Popup content='Upload file' trigger={
               <Button basic icon='upload' onClick={() => onFileUpload() } />
             } />
