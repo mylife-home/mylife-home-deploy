@@ -147,6 +147,15 @@ describe('Tasks', () => {
     });
   });
 
+  describe('ImageLs', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext();
+      await tasks.ImageLs.execute(context, { path: '/' });
+
+      // TODO: expect logs ?
+    });
+  });
+
   // ImageInstall
 
   describe('ImageExport', () => {
@@ -242,6 +251,16 @@ describe('Tasks', () => {
   });
 
   // ConfigCoreComponents
+
+  describe('ConfigLs', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext();
+      await tasks.ConfigInit.execute(context, {});
+      await tasks.ConfigLs.execute(context, { path: '/' });
+
+      // TODO: expect logs ?
+    });
+  });
 
   describe('VariablesSet', () => {
     it('Should execute properly', async () => {
