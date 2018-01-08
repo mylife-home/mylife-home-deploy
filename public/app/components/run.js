@@ -68,7 +68,7 @@ const Run = ({ run, onRunDownloadLogs }) => (
 
               <Table.Body>
                 {run.logs.map((log, index) => (
-                  <Table.Row key={index} error={log.category === 'error'} warning={log.category==='warning'}>
+                  <Table.Row key={index} error={log.severity === 'error'} warning={log.severity === 'warning'}>
                     <Table.Cell>{formatDate(log.date)}</Table.Cell>
                     <Table.Cell>{log.category}</Table.Cell>
                     <Table.Cell>{log.severity}</Table.Cell>
