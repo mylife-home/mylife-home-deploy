@@ -99,6 +99,23 @@ describe('Tasks', () => {
 
       expect(list).to.deep.equal(require('./content/cache'));
     });
+
+    it('Should execute properly without cache directory', async () => {
+      const context = await initContext({ nocache : true });
+      await tasks.ConfigInit.execute(context, {});
+      await tasks.ConfigPackage.execute(context, { name : 'nodejs' });
+      await tasks.ImageRemove.execute(context, { path : '/cache' });
+
+      // use fake repo
+      vfs.writeText(context.config, [ 'etc', 'apk', 'repositories' ], '/media/mmcblk0p1/apks\nhttp://localhost:4242');
+
+      await tasks.ImageCache.execute(context, {});
+
+      const cache = vfs.path(context.root, [ 'cache' ]);
+      const list  = cache.list().map(f => ({ name : f.name, size : f.content.length }));
+
+      expect(list).to.deep.equal(require('./content/cache'));
+    });
   });
 
   describe('ImageDeviceTreeOverlay', () => {
