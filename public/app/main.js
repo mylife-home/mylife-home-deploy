@@ -7,8 +7,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import 'semantic-ui-css/semantic.min.css';
 
-//import { getAccounts, getGroups } from './actions/common';
-//import { getOperations } from './actions/management';
 import Application from './components/application';
 
 import /*store from*/ './services/store-factory';
