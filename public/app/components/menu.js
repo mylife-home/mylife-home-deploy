@@ -2,7 +2,7 @@
 
 import React                 from 'react';
 import PropTypes             from 'prop-types';
-import { Menu, Icon }        from 'semantic-ui-react';
+import { Menu, Icon, Popup } from 'semantic-ui-react';
 import { runStatusIconName } from './tools';
 
 const styles = {
@@ -16,7 +16,7 @@ const styles = {
   }
 };
 
-const AppMenu = ({ recipes, runs, onRecipeListClick, onRecipeClick, onRunListClick, onRunClick, onFileListClick }) => (
+const AppMenu = ({ recipes, runs, onRecipeListClick, onRecipeClick, onRecipeStart, onRunListClick, onRunClick, onFileListClick }) => (
   <Menu icon='labeled' size='small' vertical fluid fixed='left' style={styles.root}>
     <Menu.Item>
       <Menu.Menu>
@@ -33,6 +33,9 @@ const AppMenu = ({ recipes, runs, onRecipeListClick, onRecipeClick, onRunListCli
             <Menu.Header align='left' style={{ marginLeft: '1em' }}>
               <Icon name='file text outline' />
               {recipe.name}
+              <Popup content='Start recipe' trigger={
+                <Icon name='play' style={{ float: 'right' }} onClick={e => { e.stopPropagation(); onRecipeStart(recipe.name); }} />
+              } />
             </Menu.Header>
           </Menu.Item>
         )}
@@ -80,6 +83,7 @@ AppMenu.propTypes = {
   runs              : PropTypes.object.isRequired,
   onRecipeListClick : PropTypes.func.isRequired,
   onRecipeClick     : PropTypes.func.isRequired,
+  onRecipeStart     : PropTypes.func.isRequired,
   onRunListClick    : PropTypes.func.isRequired,
   onRunClick        : PropTypes.func.isRequired,
   onFileListClick   : PropTypes.func.isRequired,
