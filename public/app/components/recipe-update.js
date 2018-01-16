@@ -1,13 +1,45 @@
-import React                                                          from 'react';
-import PropTypes                                                      from 'prop-types';
+import React                                                                   from 'react';
+import PropTypes                                                               from 'prop-types';
 import { Modal, Input, Header, Button, Popup, Item, Dropdown, Table, Segment } from 'semantic-ui-react';
-import { confirmable, createConfirmation }                            from 'react-confirm';
+import { confirmable, createConfirmation }                                     from 'react-confirm';
 
 function swap(arr, index1, index2) {
   const res   = arr.slice();
   res[index2] = arr[index1];
   res[index1] = arr[index2];
   return res;
+}
+
+function insert(arr, index, item) {
+  if(index === -1) {
+    index = arr.length;
+  }
+  return [
+    ... arr.slice(0, index),
+    item,
+    ... arr.slice(index)
+  ];
+}
+
+function remove(arr, index) {
+  return [
+    ... arr.slice(0, index),
+    ... arr.slice(index + 1)
+  ];
+}
+
+function moveFirst(arr, index) {
+  const item = arr[index];
+  const newArr = remove(arr, index);
+  newArr.unshift(item);
+  return newArr;
+}
+
+function moveLast(arr, index) {
+  const item = arr[index];
+  const newArr = remove(arr, index);
+  newArr.push(item);
+  return newArr;
 }
 
 class RecipeUpdateDialog extends React.Component {
@@ -28,22 +60,31 @@ class RecipeUpdateDialog extends React.Component {
     return ++this.idgen;
   }
 
-  stepCreate() {
-    this.setState({ steps : [ ... this.state.steps, {
+  newStep() {
+    return {
       id   : this.createId(),
       type : 'task'
-    }]});
+    };
+  }
+
+  stepCreate(index = -1) {
+    this.setState({ steps : insert(this.state.steps,index, this.newStep()) });
   }
 
   stepRemove(index) {
-    this.setState({ steps : [
-      ... this.state.steps.slice(0, index),
-      ... this.state.steps.slice(index + 1)
-    ]});
+    this.setState({ steps : remove(this.state.steps, index) });
   }
 
   stepSwap(index1, index2) {
-    this.setState({ steps : swap(this.state.steps, index1, index2)});
+    this.setState({ steps : swap(this.state.steps, index1, index2) });
+  }
+
+  stepFirst(index) {
+    this.setState({ steps : moveFirst(this.state.steps, index) });
+  }
+
+  stepLast(index) {
+    this.setState({ steps : moveLast(this.state.steps, index) });
   }
 
   stepChangeType(index, type) {
@@ -136,6 +177,9 @@ class RecipeUpdateDialog extends React.Component {
                           <Table.Row>
                             <Table.Cell colSpan='3'>
                               <Button.Group basic>
+                                <Popup content='New step before' trigger={
+                                  <Button basic icon='add circle' onClick={() => this.stepCreate(index)} />
+                                } />
                                 <Popup content='Delete step' trigger={
                                   <Button basic icon='trash outline' onClick={() => this.stepRemove(index)} />
                                 } />
@@ -146,10 +190,10 @@ class RecipeUpdateDialog extends React.Component {
                                   <Button disabled={index === steps.length - 1} basic icon='chevron circle down' onClick={() => this.stepSwap(index, index+1)} />
                                 } />
                                 <Popup content='Move top' trigger={
-                                  <Button disabled={index === 0} basic icon='arrow circle outline up' onClick={() => this.stepSwap(index, 0)} />
+                                  <Button disabled={index === 0} basic icon='arrow circle outline up' onClick={() => this.stepFirst(index)} />
                                 } />
                                 <Popup content='Move bottom' trigger={
-                                  <Button disabled={index === steps.length - 1} basic icon='arrow circle outline down' onClick={() => this.stepSwap(index, steps.length - 1)} />
+                                  <Button disabled={index === steps.length - 1} basic icon='arrow circle outline down' onClick={() => this.stepLast(index)} />
                                 } />
                               </Button.Group>
                             </Table.Cell>
