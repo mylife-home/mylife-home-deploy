@@ -324,10 +324,10 @@ describe('Manager', () => {
       recipe : 'recipe',
       status : 'ended',
       logs   : [
-        { severity : 'info', category : 'recipe',       message: 'begin \'recipe\''                                                                                   },
+        { severity : 'info', category : 'recipe',       message: 'begin \'recipe\''                                                                                                     },
         { severity : 'info', category : 'image:import', message: 'import \'/tmp/mylife-home-deploy-test-manager/files/rpi-devel-base.tar.gz\' using root path \'mmcblk0p1\' into image' },
-        { severity : 'info', category : 'config:init',  message: 'extract config from image file \'rpi-devel.apkovl.tar.gz\''                                         },
-        { severity : 'info', category : 'recipe',       message: 'end \'recipe\''                                                                                     }
+        { severity : 'info', category : 'config:init',  message: 'extract config from image file \'rpi-devel.apkovl.tar.gz\''                                                           },
+        { severity : 'info', category : 'recipe',       message: 'end \'recipe\''                                                                                                       }
       ]
     });
   });
