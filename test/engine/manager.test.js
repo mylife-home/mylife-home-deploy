@@ -68,6 +68,7 @@ async function waitTaskEnd(manager, runId) {
 function stripRunTimes(run) {
   delete run.creation;
   delete run.end;
+  run.logs.forEach(it => delete it.date);
   return run;
 }
 
