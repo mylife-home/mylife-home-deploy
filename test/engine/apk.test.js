@@ -24,9 +24,10 @@ const nodejsPackage = {
   raw          : 'C:Q1G4khijXgbIREHU26+toG2eIuYhU=\nP:nodejs\nV:8.9.3-r0\nA:armhf\nS:7134025\nI:19423232\nT:JavaScript runtime built on V8 engine - LTS version\nU:https://nodejs.org/\nL:MIT\no:nodejs\nm:Jakub Jirutka <jakub@jirutka.cz>\nt:1512781942\nc:33e07701fafe36a157f32d67a4f84670a31a7a55\nD:ca-certificates nodejs-npm=8.9.3-r0 so:libc.musl-armhf.so.1 so:libcares.so.2 so:libcrypto.so.1.0.0 so:libgcc_s.so.1 so:libhttp_parser.so.2.7.1 so:libssl.so.1.0.0 so:libstdc++.so.6 so:libuv.so.1 so:libz.so.1\np:nodejs-lts=8.9.3 cmd:node\n\n',
   name         : 'nodejs',
   version      : '8.9.3-r0',
+  architecture : 'armhf',
   size         : 7134025,
   csum         : Buffer.from([ 0x1b, 0x89, 0x21, 0x8a, 0x35, 0xe0, 0x6c, 0x84, 0x44, 0x1d, 0x4d, 0xba, 0xfa, 0xda, 0x06, 0xd9, 0xe2, 0x2e, 0x62, 0x15 ]),
-  repo         : 'http://dl-4.alpinelinux.org/alpine/v3.7/main/armhf/',
+  repo         : 'http://dl-4.alpinelinux.org/alpine/v3.7/main',
   dependencies : {
     'ca-certificates'            : '*',
     'nodejs-npm'                 : '8.9.3-r0',
