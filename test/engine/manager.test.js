@@ -107,12 +107,22 @@ describe('Manager', () => {
     }, {
       name        : 'config-core-components'
     }, {
+      name        : 'config-ls',
+      description : 'print the content of a directory from the config fs',
+      parameters  : [
+        { description : 'path to directory to list', name : 'path', type : 'string' }
+      ]
+    }, {
       name        : 'image-import',
       description : 'import the specified archive into the root fs of the image',
       parameters  : [
-        { name : 'archiveName', description : 'archive name',                           type : 'string', default : 'rpi-devel-base.tar.gz' },
-        { name : 'rootPath',    description : 'path of the root fs inside the archive', type : 'string', default : 'mmcblk0p1' }
+        { name : 'archiveName', description : 'archive name',                           type : 'string' },
+        { name : 'rootPath',    description : 'path of the root fs inside the archive', type : 'string', default : '' }
       ]
+    }, {
+      name        : 'image-pack',
+      description : 'pack the config into the root fs, then the root fs into an archive',
+      parameters  : []
     }, {
       name        : 'image-remove',
       description : 'remove a node (file/directory/symlink) from the root fs',
@@ -136,9 +146,23 @@ describe('Manager', () => {
         { name : 'content', description : 'param data to add', type : 'string' }
       ]
     }, {
-      name        : 'image-pack',
-      description : 'pack the config into the root fs, then the root fs into an archive',
-      parameters  : []
+      name        : 'image-cmdline-add',
+      description : 'add a parameter to cmdline.txt',
+      parameters  : [
+        { name : 'content', description : 'parameter data to add', type : 'string' }
+      ]
+    }, {
+      name        : 'image-cmdline-remove',
+      description : 'remove a parameter from cmdline.txt',
+      parameters  : [
+        { name : 'content', description : 'parameter data to search and remove', type : 'string' }
+      ]
+    }, {
+      name        : 'image-ls',
+      description : 'print the content of a directory from the root fs',
+      parameters  : [
+        { name : 'path', description : 'path to directory to list', type : 'string' }
+      ]
     }, {
       name        : 'image-install'
     }, {
