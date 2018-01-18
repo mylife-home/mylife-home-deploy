@@ -4,7 +4,6 @@ const fs            = require('fs');
 const { expect }    = require('chai');
 const { SSHClient } = require('../../lib/engine/ssh');
 
-
 describe('SSH Client', () => {
 
   describe('In real world', () => {
