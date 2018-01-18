@@ -3,6 +3,7 @@
 const fs            = require('fs');
 const path          = require('path');
 const { expect }    = require('chai');
+const vfs           = require('../../lib/engine/vfs');
 const { SSHClient } = require('../../lib/engine/ssh');
 const { SSHServer } = require('./ssh-server');
 
@@ -42,13 +43,13 @@ describe('SSH Client', () => {
 
   describe('Using mocked server', () => {
 
-    async function runClientTest(tester) {
+    async function runClientTest(rootfs, cmdhandler, tester) {
       const port = 8822;
-      const server = new SSHServer({ port, hostKeys : [ fs.readFileSync(path.resolve(__dirname, 'content/id_rsa')) ] });
+      const server = new SSHServer({ port, rootfs, cmdhandler, hostKeys : [ fs.readFileSync(path.resolve(__dirname, 'content/id_rsa')) ] });
       const client = new SSHClient();
       await client.connect({ host : 'localhost', port, username : 'root', password : 'nothing' });
       try {
-        await tester(server, client);
+        await tester(client);
       } finally {
         client.end();
         server.close();
@@ -65,14 +66,22 @@ describe('SSH Client', () => {
       return commandResult;
     }
 
-    it('Should properly execute command on mocked server', async () => runClientTest(async (server, client) => {
-      server.registerCommandHandler(cmdHandler);
+    it('Should properly execute command on mocked server', async () => await runClientTest(new vfs.Directory(), cmdHandler, async (client) => {
       expect(await client.exec(command)).to.equal(commandResult);
     }));
 
-    it('Should fail to execute wrong command on mocked server', async () => runClientTest(async (server, client) => {
-      server.registerCommandHandler(cmdHandler);
-      expect(await client.exec('wrong command')).to.equal(commandResult);
+    it('Should fail to execute wrong command on mocked server', async () => await runClientTest(new vfs.Directory(), cmdHandler, async (client) => {
+      let err;
+      try {
+        await client.exec('wrong command');
+      } catch(exc) {
+        err = exc;
+      }
+      expect(err).to.match(/Error: Command has error output : 'Unknown command'/);
+    }));
+
+    it('Should properly access sftp on moched server', async () => await runClientTest(new vfs.Directory(), cmdHandler, async (client) => {
+      expect(await client.sftpReaddir('/')).to.equal([]);
     }));
   });
 });
