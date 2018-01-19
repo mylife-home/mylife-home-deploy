@@ -222,16 +222,24 @@ describe('SSH', () => {
           { name : 'sub-dir', uid : 0, gid : 0, mode : 0o40755, size : 0 }
         ] });
       }},
-/*
+
       { description : 'should properly upload a file' , run : async client => {
+        await client.sftp.writeFile('/tmp/sftp-test/file', Buffer.from('toto'));
+        await expectDir(client, { expected : [{ name : 'file', uid : 0, gid : 0, mode : 0o100644, size : 4 }] });
       }},
 
       { description : 'should properly download a file' , run : async client => {
+        const source = Buffer.from('toto');
+        await client.sftp.writeFile('/tmp/sftp-test/file', source);
+        const dest = await client.sftp.readFile('/tmp/sftp-test/file');
+        expect(dest).to.deep.equal(source);
       }},
 
-      { description : 'should properly remove a file' , run : async client => {
+      { description : 'should properly unlink a file' , run : async client => {
+        await client.sftp.writeFile('/tmp/sftp-test/file', Buffer.from('toto'));
+        await client.sftp.unlink('/tmp/sftp-test/file');
+        await expectDir(client, { expected : [] });
       }},
-*/
     ];
 
     for(const env of envs) {
