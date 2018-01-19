@@ -77,7 +77,18 @@ function expectConfigSymlink(context, path, target) {
   expect(node.target).to.equal(target);
 }
 
+async function expectFail(test, match) {
+  let err;
+  try {
+    await test();
+  } catch(exc) {
+    err = exc;
+  }
+  expect(err).to.match(match);
+}
+
 exports.printLines          = printLines;
 exports.formatStructure     = formatStructure;
 exports.expectConfigContent = expectConfigContent;
 exports.expectConfigSymlink = expectConfigSymlink;
+exports.expectFail          = expectFail;

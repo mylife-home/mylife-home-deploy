@@ -219,10 +219,12 @@ class SFTPSession {
   }
 
   async fstat(ctx, handle) {
+    void ctx, handle;
     await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
   }
 
   async fsetstat(ctx, handle, attrs) {
+    void ctx, handle, attrs;
     await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
   }
 
@@ -260,42 +262,109 @@ class SFTPSession {
   }
 
   async lstat(ctx, path) {
+    void ctx, path;
     await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
   }
 
   async stat(ctx, path) {
+    void ctx, path;
     await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
+  }
+
+  async _removeByType(ctx, path, isdir) {
+    const nodes = path.split('/').filter(n => n);
+    const dir   = vfs.path(this.rootfs, nodes.slice(0, nodes.length - 1), true);
+    if(!dir) {
+      return await ctx.status(SFTP_STATUS_CODE.NO_SUCH_FILE);
+    }
+
+    const node = dir.get(nodes[nodes.length - 1]);
+    if(!node) {
+      return await ctx.status(SFTP_STATUS_CODE.NO_SUCH_FILE);
+    }
+    if(isdir ^ (node instanceof vfs.Directory)) {
+      return await ctx.status(SFTP_STATUS_CODE.NO_SUCH_FILE);
+    }
+
+    dir.delete(node);
+    await ctx.status(SFTP_STATUS_CODE.OK);
   }
 
   async remove(ctx, path) {
-    await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
+    await this._removeByType(ctx, path, false);
   }
 
   async rmdir(ctx, path) {
-    await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
+    await this._removeByType(ctx, path, true);
   }
 
   async realpath(ctx, path) {
+    void ctx, path;
     await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
   }
 
   async readlink(ctx, path) {
+    void ctx, path;
     await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
   }
 
   async setstat(ctx, path, attrs) {
+    void ctx, path, attrs;
     await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
   }
 
   async mkdir(ctx, path, attrs) {
-    await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
+    const nodes = path.split('/').filter(n => n);
+    const dir   = vfs.path(this.rootfs, nodes.slice(0, nodes.length - 1), true);
+    if(!dir) {
+      return await ctx.status(SFTP_STATUS_CODE.NO_SUCH_FILE);
+    }
+    const name = nodes[nodes.length - 1];
+    if(dir.get(name)) {
+      return await ctx.status(SFTP_STATUS_CODE.FAILURE);
+    }
+
+    const newDir = new vfs.Directory({ name });
+    if(attrs) {
+      if(typeof attrs.uid !== 'undefined')  { newDir.uid  = attrs.uid; }
+      if(typeof attrs.gid !== 'undefined')  { newDir.gid  = attrs.gid; }
+      if(typeof attrs.mode !== 'undefined') { newDir.mode = attrs.mode & 0o777; }
+    }
+    dir.add(newDir);
+    await ctx.status(SFTP_STATUS_CODE.OK);
   }
 
   async rename(ctx, oldPath, newPath) {
-    await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
+    const oldNodes = oldPath.split('/').filter(n => n);
+    const oldDir   = vfs.path(this.rootfs, oldNodes.slice(0, oldNodes.length - 1), true);
+    if(!oldDir) {
+      return await ctx.status(SFTP_STATUS_CODE.NO_SUCH_FILE);
+    }
+    const oldName = oldNodes[oldNodes.length - 1];
+
+    const newNodes = newPath.split('/').filter(n => n);
+    const newDir   = vfs.path(this.rootfs, newNodes.slice(0, newNodes.length - 1), true);
+    if(!newDir) {
+      return await ctx.status(SFTP_STATUS_CODE.NO_SUCH_FILE);
+    }
+    const newName = newNodes[newNodes.length - 1];
+
+    const node = oldDir.get(oldName);
+    if(!node) {
+      return await ctx.status(SFTP_STATUS_CODE.NO_SUCH_FILE);
+    }
+    if(newDir.get(newName)) {
+      return await ctx.status(SFTP_STATUS_CODE.FAILURE);
+    }
+
+    oldDir.delete(node);
+    node.name = newName;
+    newDir.add(node);
+    await ctx.status(SFTP_STATUS_CODE.OK);
   }
 
   async symlink(ctx, linkPath, targetPath) {
+    void ctx, linkPath, targetPath;
     await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
   }
 }
