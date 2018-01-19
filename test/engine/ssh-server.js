@@ -88,9 +88,10 @@ class HandleTable {
     return this._bufferFromInt(id);
   }
 
-  target(handle) {
+  target(handle, Type) {
     const id = this._bufferToInt(handle);
-    return this.map.get(id);
+    const ret = this.map.get(id);
+    if(ret instanceof Type) { return ret; }
   }
 
   delete(handle) {
@@ -100,7 +101,38 @@ class HandleTable {
 }
 
 class OpenedFile {
+  constructor(node, options) {
+    this.node     = node;
+    this.readable = !!options.readable;
+    this.writable = !!options.writable;
+  }
 
+  write(offset, data) {
+    if(!this.writable) { return; }
+
+    // resize needed ?
+    const requiredLength = offset + data.length;
+    if(requiredLength > this.node.content.length) {
+      const buffer = Buffer.alloc(requiredLength);
+      this.node.content.copy(buffer);
+      this.node.content = buffer;
+    }
+
+    data.copy(this.node.content, offset);
+    return true;
+  }
+
+  read(offset, length) {
+    if(!this.readable) { return; }
+    return this.node.content.slice(offset, offset + length);
+  }
+
+  stat() {
+    const { uid, gid, atime, mtime } = this.node;
+    const mode = this.node.mode + S_IFREG;
+    const size = this.node.content.length;
+    return { mode, size, uid, gid, atime, mtime };
+  }
 }
 
 class OpenedDirectory {
@@ -207,20 +239,82 @@ class SFTPSession {
   }
 
   async open(ctx, filename, flags, attrs) {
-    await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
+    if(flags & SFTP_OPEN_MODE.APPEND) {
+      return await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
+    }
+
+    const nodes = filename.split('/').filter(n => n);
+    const dir   = vfs.path(this.rootfs, nodes.slice(0, nodes.length - 1), true);
+    if(!dir) {
+      return await ctx.status(SFTP_STATUS_CODE.NO_SUCH_FILE);
+    }
+    const name = nodes[nodes.length - 1];
+    let file = dir.get(name);
+
+    if(file && (flags & SFTP_OPEN_MODE.CREATE) && (flags & SFTP_OPEN_MODE.EXCL)) {
+      return await ctx.status(SFTP_STATUS_CODE.FAILURE);
+    }
+
+    if(!file) {
+      if(!(flags & SFTP_OPEN_MODE.CREAT)) {
+        return await ctx.status(SFTP_STATUS_CODE.NO_SUCH_FILE);
+      }
+
+      file = new vfs.File({ name });
+
+      const { mode, uid, gid, atime, mtime } = attrs;
+      if(typeof mode !== 'undefined')  { file.mode  = mode & 0o777; }
+      if(typeof uid !== 'undefined')   { file.uid   = uid; }
+      if(typeof gid !== 'undefined')   { file.gid   = gid; }
+      if(typeof atime !== 'undefined') { file.atime = new Date(atime); }
+      if(typeof mtime !== 'undefined') { file.mtime = new Date(mtime); }
+
+      dir.add(file);
+    }
+
+    if((flags & SFTP_OPEN_MODE.WRITE) && (flags & SFTP_OPEN_MODE.TRUNC)) {
+      file.content = Buffer.alloc(0);
+    }
+
+    const openedFile = new OpenedFile(file, {
+      readable : flags & SFTP_OPEN_MODE.READ,
+      writable : flags & SFTP_OPEN_MODE.WRITE,
+    });
+
+    const handle = this.handleTable.create(openedFile);
+    await ctx.handle(handle);
   }
 
   async read(ctx, handle, offset, length) {
-    await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
+    const openedFile = this.handleTable.target(handle, OpenedFile);
+    if(!openedFile) {
+      return await ctx.status(SFTP_STATUS_CODE.FAILURE);
+    }
+    const data = openedFile.read(offset, length);
+    if(!data) {
+      return await ctx.status(SFTP_STATUS_CODE.FAILURE);
+    }
+    if(!data.length) {
+      return await ctx.status(SFTP_STATUS_CODE.EOF);
+    }
+    await ctx.data(data);
   }
 
   async write(ctx, handle, offset, data) {
-    await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
+    const openedFile = this.handleTable.target(handle, OpenedFile);
+    if(!openedFile) {
+      return await ctx.status(SFTP_STATUS_CODE.FAILURE);
+    }
+    const ret = openedFile.write(offset, data);
+    await ctx.status(ret ? SFTP_STATUS_CODE.OK : SFTP_STATUS_CODE.FAILURE);
   }
 
   async fstat(ctx, handle) {
-    void ctx, handle;
-    await ctx.status(SFTP_STATUS_CODE.OP_UNSUPPORTED);
+    const openedFile = this.handleTable.target(handle, OpenedFile);
+    if(!openedFile) {
+      return await ctx.status(SFTP_STATUS_CODE.FAILURE);
+    }
+    await ctx.attrs(openedFile.stat());
   }
 
   async fsetstat(ctx, handle, attrs) {
@@ -249,7 +343,7 @@ class SFTPSession {
   }
 
   async readdir(ctx, handle) {
-    const openedDirectory = this.handleTable.target(handle);
+    const openedDirectory = this.handleTable.target(handle, OpenedDirectory);
     if(!openedDirectory) {
       return await ctx.status(SFTP_STATUS_CODE.FAILURE);
     }
