@@ -250,7 +250,7 @@ describe('Tasks', () => {
       }
     } } }, [
       { command : 'mount -o remount,rw /media/mmcblk0p1', result : '' },
-      //{ command : 'reboot', result : '' },
+      { command : 'reboot', result : '' },
     ], async () => {
 
       const context = await initContext({ noload : true });
