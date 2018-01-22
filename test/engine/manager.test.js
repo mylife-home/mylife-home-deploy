@@ -91,6 +91,13 @@ describe('Manager', () => {
         { name : 'hostname', description : 'host name', type : 'string' }
       ]
     }, {
+      name        : 'config-hwaddress',
+      description : 'set the hardware address of a network interface',
+      parameters  : [
+        { name : 'iface',   description : 'network interface name (eg: eth0)',          type : 'string' },
+        { name : 'address', description : 'mac address to set (eg: 11:22:33:44:55:66)', type : 'string' }
+      ]
+    }, {
       name        : 'config-wifi'
     }, {
       name        : 'config-package',
