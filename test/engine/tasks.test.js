@@ -209,6 +209,15 @@ describe('Tasks', () => {
     });
   });
 
+  describe('ImageCoreComponents', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext({ nocache : true });
+      await tasks.ImageCoreComponents.execute(context, { file : 'components.json' });
+
+      expect(vfs.readText(context.root, [ 'mylife-home', 'mylife-home-core-components.json' ])).to.equal('\'components\'');
+    });
+  });
+
   describe('ImageLs', () => {
     it('Should execute properly', async () => {
       const context = await initContext();
@@ -385,8 +394,6 @@ describe('Tasks', () => {
       expectConfigContent(context, [ 'etc', 'apk', 'world' ]);
     });
   });
-
-  // ConfigCoreComponents
 
   describe('ConfigLs', () => {
     it('Should execute properly', async () => {

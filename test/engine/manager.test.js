@@ -119,8 +119,6 @@ describe('Manager', () => {
         { name : 'runlevel', description : 'runlevel',    type : 'string', default : 'default' }
       ]
     }, {
-      name        : 'config-core-components'
-    }, {
       name        : 'config-ls',
       description : 'print the content of a directory from the config fs',
       parameters  : [
@@ -170,6 +168,12 @@ describe('Manager', () => {
       description : 'remove a parameter from cmdline.txt',
       parameters  : [
         { name : 'content', description : 'parameter data to search and remove', type : 'string' }
+      ]
+    }, {
+      name        : 'image-core-components',
+      description : 'setup core components file',
+      parameters  : [
+        { name : 'file', description : 'file name to import', type : 'string' }
       ]
     }, {
       name        : 'image-ls',
