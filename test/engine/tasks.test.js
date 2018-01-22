@@ -282,7 +282,7 @@ describe('Tasks', () => {
         await fs.remove(tmpDir);
       }
 
-      expect(destContent.length).to.equal(74553716);
+      expect(destContent.length).to.equal(74553665);
     });
   });
 
