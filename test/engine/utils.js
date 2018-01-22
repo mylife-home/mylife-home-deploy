@@ -67,8 +67,8 @@ function formatDirectory(lines, vdir, indent) {
   }
 }
 
-function expectConfigContent(context, path) {
-  expect(vfs.readText(context.config, path)).to.equal(contents[path.join('-')]);
+function expectConfigContent(context, path, suffix) {
+  expect(vfs.readText(context.config, path)).to.equal(contents[path.join('-') + (suffix ? '-' + suffix : '')]);
 }
 
 function expectConfigSymlink(context, path, target) {

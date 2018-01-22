@@ -326,6 +326,21 @@ describe('Tasks', () => {
     });
   });
 
+  describe('ConfigHwaddress', () => {
+    it('Should execute properly', async () => {
+      const iface   = 'eth0';
+      const address = '11:22:33:44:55:66';
+      const context  = await initContext();
+      await tasks.ConfigInit.execute(context, {});
+
+      await tasks.ConfigHwaddress.execute(context, {
+        iface, address
+      });
+
+      expectConfigContent(context, [ 'etc', 'network', 'interfaces' ], 'hwaddr');
+    });
+  });
+
   // ConfigWifi
 
   describe('ConfigDaemon', () => {
