@@ -168,7 +168,7 @@ describe('Manager', () => {
       name        : 'image-install'
     }, {
       name        : 'image-export',
-      description : 'import the specified archive into the root fs of the image',
+      description : 'export the root fs of the image into the specified archive',
       parameters  : [
         { name : 'archiveName', description : 'archive name', type : 'string' }
       ]
