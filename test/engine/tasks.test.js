@@ -341,7 +341,21 @@ describe('Tasks', () => {
     });
   });
 
-  // ConfigWifi
+  describe('ConfigWifi', () => {
+    it('Should execute properly', async () => {
+      const context  = await initContext();
+      await tasks.ConfigInit.execute(context, {});
+
+      await tasks.ConfigWifi.execute(context, {
+        iface : 'wlan0',
+        ssid  : 'test-ssid',
+        psk   :'123456789abcdef'
+      });
+
+      expectConfigContent(context, [ 'etc', 'network', 'interfaces' ], 'wifi');
+      expectConfigContent(context, [ 'etc', 'wpa_supplicant', 'wpa_supplicant.conf' ]);
+    });
+  });
 
   describe('ConfigDaemon', () => {
     it('Should execute properly', async () => {

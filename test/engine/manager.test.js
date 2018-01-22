@@ -98,7 +98,13 @@ describe('Manager', () => {
         { name : 'address', description : 'mac address to set (eg: 11:22:33:44:55:66)', type : 'string' }
       ]
     }, {
-      name        : 'config-wifi'
+      name        : 'config-wifi',
+      description : 'configure a wifi interface (wpa_supplicant package and daemon required)',
+      parameters  : [
+        { name : 'iface', description : 'network interface name (eg: wlan0)',                          type : 'string' },
+        { name : 'ssid',  description : 'wifi ssid',                                                   type : 'string' },
+        { name : 'psk',   description : 'psk as in command output : wpa_passphrase MYSSID passphrase', type : 'string' }
+      ]
     }, {
       name        : 'config-package',
       description : 'add a package to be installed',
