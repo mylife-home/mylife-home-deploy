@@ -88,7 +88,7 @@ describe('Manager', () => {
       name        : 'config-hostname',
       description : 'set the hostname',
       parameters  : [
-        { name : 'hostname', description : 'host name', type : 'string', default : 'rpi-devel' }
+        { name : 'hostname', description : 'host name', type : 'string' }
       ]
     }, {
       name        : 'config-wifi'
