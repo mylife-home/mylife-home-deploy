@@ -165,7 +165,13 @@ describe('Manager', () => {
         { name : 'path', description : 'path to directory to list', type : 'string' }
       ]
     }, {
-      name        : 'image-install'
+      name        : 'image-install',
+      description : 'install the current root fs to the target host using SSH',
+      parameters  : [
+        { name : 'host',    description : 'Target host',                type : 'string' },
+        { name : 'user',    description : 'User to use on target host', type : 'string' },
+        { name : 'keyFile', description : 'SSH key to log in',          type : 'string' }
+      ]
     }, {
       name        : 'image-export',
       description : 'export the root fs of the image into the specified archive',

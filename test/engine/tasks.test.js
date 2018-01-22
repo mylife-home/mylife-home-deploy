@@ -1,12 +1,13 @@
 'use strict';
 
-const path        = require('path');
-const fs          = require('fs-extra');
-const { expect }  = require('chai');
-const express     = require('express');
-const tasks       = require('../../lib/engine/tasks');
-const vfs         = require('../../lib/engine/vfs');
-const directories = require('../../lib/directories');
+const path          = require('path');
+const fs            = require('fs-extra');
+const { expect }    = require('chai');
+const express       = require('express');
+const tasks         = require('../../lib/engine/tasks');
+const vfs           = require('../../lib/engine/vfs');
+const { SSHServer } = require('./ssh-server');
+const directories   = require('../../lib/directories');
 const {
   formatStructure,
   expectConfigContent,
@@ -19,6 +20,17 @@ let cachedRoot;
 const logger = (category, severity, message) => {
   process.env.VERBOSE === '1' && console.log(`${severity} : [${category}] ${message}`); // eslint-disable-line no-console
 };
+
+const pad = number => ((number < 10) ? ('0' + number) : number);
+
+const printDate = date =>
+  date.getFullYear() +
+  pad(date.getMonth() + 1) +
+  pad(date.getDate()) +
+  '-' +
+  pad(date.getHours()) +
+  pad(date.getMinutes()) +
+  pad(date.getSeconds());
 
 async function initContext(options = {}) {
   if(options.noload) {
@@ -36,6 +48,50 @@ async function initContext(options = {}) {
   });
   !options.nocache && (cachedRoot = context.root);
   return context;
+}
+
+function createHierarchy(rootfs, hierarchy) {
+  for(const [name, item] of Object.entries(hierarchy)) {
+    if(typeof item === 'string' || item instanceof Buffer) {
+      const file = new vfs.File({ name, content : (item instanceof Buffer ? item : Buffer.from(item)) });
+      rootfs.add(file);
+      continue;
+    }
+
+    const directory = new vfs.Directory({ name });
+    rootfs.add(directory);
+    createHierarchy(directory, item);
+  }
+}
+
+async function runSshTest(hierarchy, expectedHierarchy, expectedCmds, tester) {
+  let nextCmd = 0;
+
+  const cmdhandler = cmd => {
+    const def = expectedCmds[nextCmd++];
+    expect(def.command === cmd);
+    return def.result;
+  };
+
+  const rootfs = new vfs.Directory();
+  createHierarchy(rootfs, hierarchy);
+  const expectedRootfs = new vfs.Directory();
+  createHierarchy(expectedRootfs, expectedHierarchy);
+
+  const server = new SSHServer({
+    port : 8822,
+    rootfs,
+    cmdhandler, hostKeys : [ fs.readFileSync(path.resolve(__dirname, '../resources/files/id_rsa')) ]
+  });
+
+  try {
+    await tester();
+  } finally {
+    server.close();
+  }
+
+  expect(nextCmd).to.equal(expectedCmds.length);
+  expect(formatStructure(rootfs)).to.deep.equal(formatStructure(expectedRootfs));
 }
 
 describe('Tasks', () => {
@@ -162,7 +218,54 @@ describe('Tasks', () => {
     });
   });
 
-  // ImageInstall
+  describe('ImageInstall', () => {
+    it('Should execute properly', async () => runSshTest({ 'media' : { 'mmcblk0p1' : {
+      'backup-1' : {
+        'file1'  : 'old1-content1',
+        '.file2' : 'old1-content2',
+      },
+      'backup-2' : {
+        'file1'  : 'old2-content1',
+        '.file2' : 'old2-content2',
+      },
+      'file1'  : 'content1',
+      '.file2' : 'content2',
+    } } }, { 'media' : { 'mmcblk0p1' : {
+      'backup-1' : {
+        'file1'  : 'old1-content1',
+        '.file2' : 'old1-content2',
+      },
+      'backup-2' : {
+        'file1'  : 'old2-content1',
+        '.file2' : 'old2-content2',
+      },
+      [`backup-${printDate(new Date())}`] : {
+        'file1'  : 'content1',
+        '.file2' : 'content2',
+      },
+      'file1'   : 'new-content1',
+      '.file2'  : 'new-content2',
+      'subdir1' : {
+        'file1' : 'new-sub-content1'
+      }
+    } } }, [
+      { command : 'mount -o remount,rw /media/mmcblk0p1', result : '' },
+      //{ command : 'reboot', result : '' },
+    ], async () => {
+
+      const context = await initContext({ noload : true });
+      context.root = new vfs.Directory();
+      createHierarchy(context.root, {
+        'file1'   : 'new-content1',
+        '.file2'  : 'new-content2',
+        'subdir1' : {
+          'file1' : 'new-sub-content1'
+        }
+      });
+
+      await tasks.ImageInstall.execute(context, { host : 'localhost:8822', user : 'root', keyFile : 'id_rsa' });
+    }));
+  });
 
   describe('ImageExport', () => {
     it('Should execute properly', async () => {
