@@ -14,7 +14,7 @@ class InputDialog extends React.Component {
     const { show, proceed, /*dismiss,*/ cancel, /*confirmation,*/ options } = this.props;
     const { value } = this.state;
     return (
-      <Modal open={show} onClose={() => cancel()}>
+      <Modal open={show}>
         <Header icon='help circle' content={options.title} />
         <Modal.Content>
           <Input onChange={e => this.setState({ value : e.target.value })} value={value} />
