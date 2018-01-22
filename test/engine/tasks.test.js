@@ -52,17 +52,6 @@ describe('Tasks', () => {
     });
   });
 
-  describe('ImagePack', () => {
-    it('Should execute properly', async () => {
-      const context = await initContext({ nocache : true });
-      await tasks.ConfigInit.execute(context, {});
-      await tasks.ImagePack.execute(context, {});
-
-      expect(context.image).to.be.an.instanceof(Buffer);
-      expect(context.image.length).to.equal(74553888);
-    });
-  });
-
   describe('ImageRemove', () => {
     it('Should execute properly', async () => {
       const context = await initContext({ nocache : true });
@@ -177,10 +166,8 @@ describe('Tasks', () => {
 
   describe('ImageExport', () => {
     it('Should execute properly', async () => {
-      const context = await initContext({ noload : true });
-      const sourceContent = await fs.readFile(path.resolve(__dirname, '../resources/files/rpi-devel-base.tar.gz'));
+      const context = await initContext({ nocache : true });
       let destContent;
-      context.image = sourceContent;
 
       const tmpDir = '/tmp/mylife-home-deploy-test-task-export';
       directories.configure(tmpDir);
@@ -191,7 +178,8 @@ describe('Tasks', () => {
       } finally {
         await fs.remove(tmpDir);
       }
-      expect(destContent).to.deep.equal(sourceContent);
+
+      expect(destContent.length).to.equal(74553716);
     });
   });
 
@@ -199,14 +187,13 @@ describe('Tasks', () => {
     it('Should execute properly', async () => {
       const context = await initContext({ nocache : true });
       await tasks.ConfigInit.execute(context, {});
-      await tasks.ImagePack.execute(context, {});
+      await tasks.ConfigPack.execute(context, {});
       await tasks.VariablesSet.execute(context, { name: 'variable', value: 'value' });
       await tasks.ImageReset.execute(context, {});
 
       expect(context.variables).to.deep.equal({ variable : 'value' });
       expect(context.root).to.be.null;
       expect(context.config).to.be.null;
-      expect(context.image).to.be.null;
     });
   });
 
@@ -279,6 +266,19 @@ describe('Tasks', () => {
     });
   });
 
+  describe('ConfigPack', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext({ nocache : true });
+      await tasks.ConfigInit.execute(context, {});
+      const node = vfs.path(context.root, [ 'rpi-devel.apkovl.tar.gz' ]);
+      node.content = Buffer.alloc(0); // reset config file
+
+      await tasks.ConfigPack.execute(context, {});
+
+      expect(node.content.length).to.equal(10603);
+    });
+  });
+
   describe('VariablesSet', () => {
     it('Should execute properly', async () => {
       const context = await initContext({ noload: true });
@@ -292,15 +292,13 @@ describe('Tasks', () => {
     it('Should execute properly', async () => {
       const context = await initContext();
       await tasks.ConfigInit.execute(context, {});
-      await tasks.ImagePack.execute(context, {});
+      await tasks.ConfigPack.execute(context, {});
       await tasks.VariablesSet.execute(context, { name: 'variable', value: 'value' });
       await tasks.VariablesReset.execute(context, {});
-
 
       expect(context.variables).to.be.null;
       expect(context.root).to.exist;
       expect(context.config).to.exist;
-      expect(context.image).to.exist;
     });
   });
 });

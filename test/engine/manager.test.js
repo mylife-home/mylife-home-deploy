@@ -114,16 +114,16 @@ describe('Manager', () => {
         { description : 'path to directory to list', name : 'path', type : 'string' }
       ]
     }, {
+      name        : 'config-pack',
+      description : 'pack the config into the root fs',
+      parameters  : []
+    }, {
       name        : 'image-import',
       description : 'import the specified archive into the root fs of the image',
       parameters  : [
         { name : 'archiveName', description : 'archive name',                           type : 'string' },
         { name : 'rootPath',    description : 'path of the root fs inside the archive', type : 'string', default : '' }
       ]
-    }, {
-      name        : 'image-pack',
-      description : 'pack the config into the root fs, then the root fs into an archive',
-      parameters  : []
     }, {
       name        : 'image-remove',
       description : 'remove a node (file/directory/symlink) from the root fs',
