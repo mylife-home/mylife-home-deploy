@@ -25,7 +25,7 @@ async function runClientRealServerTest(tester) {
 
 async function runClientMockedServerTest(rootfs, cmdhandler, tester) {
   const port = 8822;
-  const server = new SSHServer({ port, rootfs, cmdhandler, hostKeys : [ fs.readFileSync(path.resolve(__dirname, 'content/id_rsa')) ] });
+  const server = new SSHServer({ port, rootfs, cmdhandler, hostKeys : [ fs.readFileSync(path.resolve(__dirname, '../resources/files/id_rsa')) ] });
   const client = new SSHClient();
   await client.connect({ host : 'localhost', port, username : 'root', password : 'nothing' });
   try {
