@@ -85,6 +85,12 @@ describe('Manager', () => {
       description : 'Extract the config (.apkovl.tar.gz) from the image to context.config',
       parameters  : []
     }, {
+      name        : 'config-import',
+      description : 'Import the specified archive into the root fs of the config',
+      parameters  : [
+        { name : 'archiveName', description : 'archive name', type : 'string' },
+      ]
+    }, {
       name        : 'config-hostname',
       description : 'set the hostname',
       parameters  : [

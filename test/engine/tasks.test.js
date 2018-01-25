@@ -319,6 +319,23 @@ describe('Tasks', () => {
     });
   });
 
+  describe('ConfigImport', () => {
+    it('Should execute properly', async () => {
+      const context = await initContext();
+      await tasks.ConfigInit.execute(context, {});
+
+      await tasks.ConfigImport.execute(context, {
+        archiveName : 'config-import.tar.gz'
+      });
+
+      expect(formatStructure(context.config)).to.deep.equal([
+        ... require('./content/archive-config'),
+        { indent : 1, name: 'my-config',      uid : 0, gid : 0,  mode : 0o755, atime : null, mtime : new Date(1516872309000), ctime : null, dir : true },
+        { indent : 2, name: 'my-config.conf', uid : 0, gid : 0,  mode : 0o644, atime : null, mtime : new Date(1516872309000), ctime : null, length : 10 },
+      ]);
+    });
+  });
+
   describe('ConfigHostname', () => {
     it('Should execute properly', async () => {
       const hostname = 'test-host';
