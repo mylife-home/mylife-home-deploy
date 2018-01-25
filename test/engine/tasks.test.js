@@ -210,11 +210,18 @@ describe('Tasks', () => {
   });
 
   describe('ImageCoreComponents', () => {
-    it('Should execute properly', async () => {
+    it('Should execute properly without flavor', async () => {
       const context = await initContext({ nocache : true });
       await tasks.ImageCoreComponents.execute(context, { file : 'components.json' });
 
       expect(vfs.readText(context.root, [ 'mylife-home', 'mylife-home-core-components.json' ])).to.equal('\'components\'');
+    });
+
+    it('Should execute properly with flavor', async () => {
+      const context = await initContext({ nocache : true });
+      await tasks.ImageCoreComponents.execute(context, { file : 'components.json', flavor :'my-flavor' });
+
+      expect(vfs.readText(context.root, [ 'mylife-home', 'mylife-home-core-my-flavor-components.json' ])).to.equal('\'components\'');
     });
   });
 

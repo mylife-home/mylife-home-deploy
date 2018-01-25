@@ -179,7 +179,8 @@ describe('Manager', () => {
       name        : 'image-core-components',
       description : 'setup core components file',
       parameters  : [
-        { name : 'file', description : 'file name to import', type : 'string' }
+        { name : 'file',   description : 'file name to import',              type : 'string' },
+        { name : 'flavor', description : 'flavor of mylife-home-core setup', type : 'string' }
       ]
     }, {
       name        : 'image-ls',
