@@ -79,7 +79,7 @@ describe('APK', () => {
     expect(packages).to.deep.equal([
       'nodejs-8.9.3-r0',
       'ca-certificates-20171114-r0',
-      'busybox-1.27.2-r7',
+      'busybox-1.27.2-r8',
       'musl-1.1.18-r2',
       'libressl2.6-libcrypto-2.6.3-r0',
       'nodejs-npm-8.9.3-r0',
